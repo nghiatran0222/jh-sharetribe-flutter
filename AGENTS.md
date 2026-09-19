@@ -69,6 +69,7 @@ From the repo root:
 - Mock mode must run without network. The README leads with the live run; mock is the offline fallback.
 - `Result`/`AppError` is the error type. No uncaught throws in repositories. A missing image variant maps to a null image.
 - Token refresh lives only in the dio `QueuedInterceptor`.
+- Name tests as behaviors: `group('given <state>')` + `test('when <action>, then <outcome>')`; `bloc_test` descriptions read `emits [...] when ...`. No Gherkin or `.feature` files.
 - The Transaction repository and Request button are stretch work (P4b), only after P4 is green.
 - Console, `flex-cli` and live credentials are human-only steps. Stop and ask instead of attempting them.
 - One writer at a time on `flutter_app/lib`.

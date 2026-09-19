@@ -209,7 +209,7 @@ Mock: two users (customer@test.com / password123, provider@test.com / password12
 
 Live: password grant scope=user, current user show, listings query with include=author,images plus an explicit image variant (e.g. fields.image=variants.landscape-crop). Missing variants map to a null image.
 
-Tests first, injecting a Dio with a fake HttpClientAdapter. Cover: JSON:API denormalize, 401→refresh→retry, parallel 401s → exactly one refresh, rotated refresh token persisted, mock login failure, listing parse with included author+image.
+Tests first, injecting a Dio with a fake HttpClientAdapter. Cover: JSON:API denormalize, 401→refresh→retry, parallel 401s → exactly one refresh, rotated refresh token persisted, mock login failure, listing parse with included author+image. Name tests as behaviors: group('given <state>') + test('when <action>, then <outcome>') (AGENTS.md Rules).
 
 Done when cd flutter_app && flutter analyze && flutter test exits 0.
 Do not touch process.edn. Do not add packages unless required.
@@ -224,6 +224,7 @@ Replace the counter `main.dart` with a small app:
 - Replace the counter smoke test with test/app_mock_test.dart: pump `App` in mock mode, log in as customer@test.com, expect three listing titles.
 
 flutter_bloc Cubits only (test them with bloc_test). Material 3, no design system.
+Name tests as behaviors (given / when / then, AGENTS.md Rules). Cover: session restored on launch → listings; no session → login; logout clears tokens → login.
 `make verify` must stay green; the app_mock_test is the proof that mock mode shows listings without network.
 
 Session 2b (stretch, P4b, only after Session 2 is green): TransactionRepository (mock + live: initiate simple-request/release-2 with transition/request) and a ListingDetail page with a Request button (customer note). Same verify.
