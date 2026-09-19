@@ -100,7 +100,7 @@ Screens (simple, functional):
 Phase DAG (what runs, in order)
 - P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore, ADRs 0001–0006 — done
 - P1  Process spec     v1 baseline + v2 change + CHANGELOG + ADR 0007 (v2 change) / 0008 (v1 source) — done (approved 2026-09-20; process.edn frozen); publish in P7
-- P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage)
+- P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage); then add the verify hooks (ADR 0012)
 - P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
 - P4  Presentation     login + listings + full-app mock widget test
@@ -118,7 +118,9 @@ Claude Code vs Grok Build — same plan, different throttle
 | Start | Plan mode, then default | Plan / this chat, then implement |
 | Durable facts | CLAUDE.md = `@AGENTS.md` (import, not a copy) | AGENTS.md |
 | Parallel | Task subagents (read-only recon vs implement) | spawn_subagent / workflow phases; worktree isolation if two writers |
-| Verify | PostToolUse hook or “run make verify after every change” | Same command in every agent prompt |
+| Guard | PreToolUse hook `.claude/hooks/guard.py` (ADR 0012): blocks process.edn edits, `.env` writes, flex-cli | Same rules in every agent prompt |
+| Verify | From end of P2a: PostToolUse `dart format` + `flutter analyze`; Stop hook runs `make verify` (ADR 0012) | Same command in every agent prompt |
+| ADRs | `new-adr` project skill | Same steps from AGENTS.md Rules |
 | Review | Fresh /review or a new session | review skill or a read-only reviewer subagent |
 | Do not | One 4-hour “build everything” chat | One workflow that writes process.edn and Flutter UI in parallel |
 

@@ -74,9 +74,11 @@ From the repo root:
 - The Transaction repository and Request button are stretch work (P4b), only after P4 is green.
 - Console, `flex-cli` and live credentials are human-only steps. Stop and ask instead of attempting them.
 - One writer at a time on `flutter_app/lib`.
-- Every new architecture decision gets an ADR: copy `docs/adr/template.md` to the next `docs/adr/NNNN-title.md`, add one line to `.claude/second-brain/decisions.md`, and link it from the matching row in `docs/q-and-a.md`. Never contradict an Accepted ADR without writing a new ADR that supersedes it (and marking the old one "Superseded by").
+- Every new architecture decision gets an ADR: copy `docs/adr/template.md` to the next `docs/adr/NNNN-title.md`, add one line to `.claude/second-brain/decisions.md`, and link it from the matching row in `docs/q-and-a.md`. Never contradict an Accepted ADR without writing a new ADR that supersedes it (and marking the old one "Superseded by"). Use the `new-adr` skill (`.claude/skills/new-adr/`).
+- A `PreToolUse` hook (`.claude/hooks/guard.py`, ADR 0012) blocks edits to `process.edn`, writing `.env` files, and `flex-cli` in Bash. If it blocks you, stop and ask; do not work around it.
 
 ## Gotchas
 
 - `.gitignore` is a copy of the Flutter SDK's own ignore file and ignores `*.lock` globally. The project section at the bottom re-includes `pubspec.lock` and ignores `.env` / `.env.*` (except `.env.example`). Add new project rules to that section.
+- The guard hook matches Bash command text, so any Bash command containing `flex-cli` is blocked, even one that only edits docs. Use Edit/Write for text that mentions it.
 - The whole assessment is done when: the listing type uses `simple-request/release-2`, a sandbox user can log in through the app and see titles and prices, and a stranger can reproduce everything from the README in under 30 minutes.
