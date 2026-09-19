@@ -2,7 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-09-20
-- Phase: P0 follow-up (guard, `new-adr`); P2a (verify hooks); P6 (review)
+- Phase: P0 follow-up (guard, `new-adr`); P2a (verify hooks, added 2026-09-20); P6 (review)
 
 ## Context
 
@@ -24,4 +24,4 @@ Add a project `PreToolUse` guard hook (`.claude/settings.json` → `.claude/hook
 - A deliberate process change (a new version) needs the user to make the edit, or to disable the hook for that step. That is intended: process changes are human-approved.
 - The Bash check is a pattern match. It blocks any Bash command whose text contains `flex-cli`, including a script that only writes documentation about it; use Edit/Write for such docs. A Bash command that writes `process.edn` in a form the patterns miss (e.g. a Python one-liner) is not caught; the Edit/Write block and review remain the backstop.
 - The guard is tested by piping sample tool inputs to `guard.py` (7 blocked, 7 allowed cases).
-- P2a must add the verify hooks and update this ADR's Phase line or write a follow-up.
+- P2a added the verify hooks in `.claude/hooks/verify.py`. PostToolUse runs `dart format` + `dart analyze --fatal-infos` on the edited `.dart` file under `flutter_app/`. That is the same analyzer and `analysis_options.yaml` as `flutter analyze`, about 2 s per file against about 13 s. Stop runs `make verify` only when `flutter_app/` has uncommitted changes, and skips when `stop_hook_active` is set. FVM users export `FLUTTER="fvm flutter" DART="fvm dart"`.

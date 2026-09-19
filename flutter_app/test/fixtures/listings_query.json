@@ -1,0 +1,101 @@
+{
+  "data": [
+    {
+      "id": "5a8f4c3e-0000-4000-8000-000000000001",
+      "type": "listing",
+      "attributes": {
+        "title": "Canoe for a weekend",
+        "description": "Two-person canoe with paddles.",
+        "state": "published",
+        "price": { "amount": 5000, "currency": "USD" },
+        "publicData": {}
+      },
+      "relationships": {
+        "author": {
+          "data": { "id": "5a8f4c3e-0000-4000-8000-0000000000a1", "type": "user" }
+        },
+        "images": {
+          "data": [
+            { "id": "5a8f4c3e-0000-4000-8000-0000000000i1", "type": "image" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-4000-8000-000000000002",
+      "type": "listing",
+      "attributes": {
+        "title": "Tent, no photos",
+        "description": "",
+        "state": "published",
+        "price": null
+      },
+      "relationships": {
+        "author": {
+          "data": { "id": "5a8f4c3e-0000-4000-8000-0000000000a1", "type": "user" }
+        },
+        "images": { "data": [] }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-4000-8000-000000000003",
+      "type": "listing",
+      "attributes": {
+        "title": "Kayak, variant missing",
+        "description": "Single kayak.",
+        "state": "published",
+        "price": { "amount": 3500, "currency": "EUR" }
+      },
+      "relationships": {
+        "author": {
+          "data": { "id": "5a8f4c3e-0000-4000-8000-0000000000a2", "type": "user" }
+        },
+        "images": {
+          "data": [
+            { "id": "5a8f4c3e-0000-4000-8000-0000000000i2", "type": "image" }
+          ]
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "5a8f4c3e-0000-4000-8000-0000000000a1",
+      "type": "user",
+      "attributes": {
+        "banned": false,
+        "deleted": false,
+        "profile": { "displayName": "Pat P", "abbreviatedName": "PP" }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-4000-8000-0000000000i1",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "landscape-crop": {
+            "name": "landscape-crop",
+            "width": 800,
+            "height": 600,
+            "url": "https://sharetribe.imgix.net/canoe.jpg?w=800"
+          }
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-4000-8000-0000000000i2",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "square-small": {
+            "name": "square-small",
+            "width": 240,
+            "height": 240,
+            "url": "https://sharetribe.imgix.net/kayak.jpg?w=240"
+          }
+        }
+      }
+    }
+  ],
+  "meta": { "totalItems": 3, "totalPages": 1, "page": 1, "perPage": 20 }
+}
