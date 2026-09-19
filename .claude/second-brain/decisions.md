@@ -16,5 +16,6 @@ Index only. The ADRs themselves live in `docs/adr/`. Add one line here per ADR, 
 | [0012](../../docs/adr/0012-agent-harness-hooks-and-skills.md) | Guard hook + `new-adr` skill now; verify hooks at end of P2a | Accepted | P0, P2a |
 | [0013](../../docs/adr/0013-fvm-pin-no-melos.md) | Pin Flutter 3.47.4 with FVM (optional); no Melos | Accepted | P0, P2a, P5 |
 | [0014](../../docs/adr/0014-official-flutter-agent-skills-filtered.md) | `dart-flutter` plugin (skills + Dart MCP); 5 skills and banned packages blocked by the guard | Accepted | P0, P2a |
+| [0015](../../docs/adr/0015-no-openapi-codegen.md) | No OpenAPI (codegen or docs spec); tested fixtures are the API contract | Accepted | P0, P2a–P3, P7 |
 
 Planned: 0009 Result/AppError over exceptions (P2a) · 0010 token storage (P2a)

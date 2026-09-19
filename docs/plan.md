@@ -107,7 +107,7 @@ Phase DAG (what runs, in order)
 - P4b Stretch          Transaction repo + listing detail Request → transition/request (only after P4 is green)
 - P5  README           root README + Flutter setup + "Key decisions" linking docs/adr/
 - P6  Review           adversarial review vs the brief and vs every Accepted ADR
-- P7  Human live       Console + flex-cli + one live login  [YOU]
+- P7  Human live       Console + flex-cli + one live login  [YOU]; save one real listings/query response (personal data removed) as a parsed test fixture (ADR 0015)
 
 ADRs are not a phase: any phase that makes an architecture decision writes docs/adr/NNNN-*.md (from docs/adr/template.md) and adds a line to .claude/second-brain/decisions.md. P2a, P2 and P3 can be one session. process.edn is frozen once P1 is approved. P4 must not start until flutter test is green on P3. P7 cannot be delegated.
 
