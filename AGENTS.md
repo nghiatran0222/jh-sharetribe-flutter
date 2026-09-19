@@ -75,7 +75,8 @@ From the repo root:
 - Console, `flex-cli` and live credentials are human-only steps. Stop and ask instead of attempting them.
 - One writer at a time on `flutter_app/lib`.
 - Every new architecture decision gets an ADR: copy `docs/adr/template.md` to the next `docs/adr/NNNN-title.md`, add one line to `.claude/second-brain/decisions.md`, and link it from the matching row in `docs/q-and-a.md`. Never contradict an Accepted ADR without writing a new ADR that supersedes it (and marking the old one "Superseded by"). Use the `new-adr` skill (`.claude/skills/new-adr/`).
-- A `PreToolUse` hook (`.claude/hooks/guard.py`, ADR 0012) blocks edits to `process.edn`, writing `.env` files, and `flex-cli` in Bash. If it blocks you, stop and ask; do not work around it.
+- A `PreToolUse` hook (`.claude/hooks/guard.py`, ADRs 0012 and 0014) blocks edits to `process.edn`, writing `.env` files, `flex-cli` in Bash, five `dart-flutter` plugin skills that contradict the stack, and adding banned packages (`http`, `go_router`, `provider`, riverpod, `freezed`, `get_it`, `mockito`, `build_runner`, `json_serializable`). If it blocks you, stop and ask; do not work around it.
+- The `dart-flutter` plugin (ADR 0014) provides the Dart MCP server and Flutter/Dart skills. Prefer its MCP tools for analysis and tests. When a skill's advice conflicts with an ADR or this file, the ADR wins.
 
 ## Gotchas
 

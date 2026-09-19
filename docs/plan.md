@@ -121,6 +121,7 @@ Claude Code vs Grok Build — same plan, different throttle
 | Guard | PreToolUse hook `.claude/hooks/guard.py` (ADR 0012): blocks process.edn edits, `.env` writes, flex-cli | Same rules in every agent prompt |
 | Verify | From end of P2a: PostToolUse `dart format` + `flutter analyze`; Stop hook runs `make verify` (ADR 0012) | Same command in every agent prompt |
 | ADRs | `new-adr` project skill | Same steps from AGENTS.md Rules |
+| Flutter skills + MCP | `dart-flutter` plugin (project scope); guard blocks 5 conflicting skills and banned packages (ADR 0014) | `npx skills add flutter/agent-plugins`, same 5 skills excluded by hand |
 | Review | Fresh /review or a new session | review skill or a read-only reviewer subagent |
 | Do not | One 4-hour “build everything” chat | One workflow that writes process.edn and Flutter UI in parallel |
 
