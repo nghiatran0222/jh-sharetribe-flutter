@@ -11,6 +11,7 @@ A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified 
 - `docs/q-and-a.md`: questions for the reviewer. Its "Working decisions" table marks each answer Assumed, Decided or Open. Recheck an Assumed or Open row before building anything that depends on it.
 - `docs/analysis-of-requirements.md`: scope and reasoning behind the plan.
 - `docs/adr/`: Architecture Decision Records (why the stack and rules are what they are). Index: `.claude/second-brain/decisions.md`.
+- `.claude/second-brain/glossary.md`: domain terms and contexts (Identity, Catalog, Transactions). Use its names in code and tests.
 
 ## Stack
 
