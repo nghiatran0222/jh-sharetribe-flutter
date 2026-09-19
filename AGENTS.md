@@ -10,6 +10,7 @@ A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified 
 - `docs/plan.md`: phased build plan (P0–P7), agent session prompts, human gates. Its "Lock so the agent cannot drift" section is binding.
 - `docs/q-and-a.md`: questions for the reviewer. Its "Working decisions" table marks each answer Assumed, Decided or Open. Recheck an Assumed or Open row before building anything that depends on it.
 - `docs/analysis-of-requirements.md`: scope and reasoning behind the plan.
+- `docs/adr/`: Architecture Decision Records (why the stack and rules are what they are). Index: `.claude/second-brain/decisions.md`.
 
 ## Stack
 
@@ -67,6 +68,7 @@ Run from `flutter_app/` once it exists (created in P2a):
 - The Transaction repository and Request button are stretch work (P4b), only after P4 is green.
 - Console, `flex-cli` and live credentials are human-only steps. Stop and ask instead of attempting them.
 - One writer at a time on `flutter_app/lib`.
+- Every new architecture decision gets an ADR: copy `docs/adr/template.md` to the next `docs/adr/NNNN-title.md`, add one line to `.claude/second-brain/decisions.md`, and link it from the matching row in `docs/q-and-a.md`. Never contradict an Accepted ADR without writing a new ADR that supersedes it (and marking the old one "Superseded by").
 
 ## Gotchas
 

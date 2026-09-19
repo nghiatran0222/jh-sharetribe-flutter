@@ -98,18 +98,18 @@ Screens (simple, functional):
 | /listings/:id (optional) | description + Request using transition/request |
 
 Phase DAG (what runs, in order)
-- P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore — done
-- P1  Process spec     v1 baseline + v2 change + CHANGELOG — agent drafts, you approve; publish in P7
-- P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore
+- P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore, ADRs 0001–0006 — done
+- P1  Process spec     v1 baseline + v2 change + CHANGELOG + ADR 0007 (v2 change) / 0008 (v1 source) — agent drafts, you approve; publish in P7
+- P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage)
 - P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
 - P4  Presentation     login + listings + full-app mock widget test
 - P4b Stretch          Transaction repo + listing detail Request → transition/request (only after P4 is green)
-- P5  README           root README + Flutter setup
-- P6  Review           adversarial review vs the brief
+- P5  README           root README + Flutter setup + "Key decisions" linking docs/adr/
+- P6  Review           adversarial review vs the brief and vs every Accepted ADR
 - P7  Human live       Console + flex-cli + one live login  [YOU]
 
-P2a, P2 and P3 can be one session. process.edn is frozen once P1 is approved. P4 must not start until flutter test is green on P3. P7 cannot be delegated.
+ADRs are not a phase: any phase that makes an architecture decision writes docs/adr/NNNN-*.md (from docs/adr/template.md) and adds a line to .claude/second-brain/decisions.md. P2a, P2 and P3 can be one session. process.edn is frozen once P1 is approved. P4 must not start until flutter test is green on P3. P7 cannot be delegated.
 
 Claude Code vs Grok Build — same plan, different throttle
 
@@ -236,12 +236,13 @@ Root `README.md` must contain:
 - Test users
 - “Transaction process changes” — ½ page that points at `simple-request-v2/CHANGELOG.md` and restates the why in reviewer English, including why a new `release-2` alias leaves transactions started on v1 untouched
 - Security note: Client ID is public; secret never in the app
+- Key decisions: one line per ADR, linking docs/adr/
 
 6. Session 4 — Adversarial review (new agent, read-only)
 
 Review this repo as a hiring bar for Senior Flutter (API + auth + Sharetribe).
 Read the brief requirements. For each: pass / fail / gap, with file evidence.
-Hunt: secrets in git, Integration API in Flutter, JSON parsed as plain maps in widgets, session not restored, process edited in place, counter UI left behind, tests still the counter test, README that cannot be followed.
+Hunt: code that contradicts an Accepted ADR in docs/adr/, secrets in git, Integration API in Flutter, JSON parsed as plain maps in widgets, session not restored, process edited in place, counter UI left behind, tests still the counter test, README that cannot be followed.
 Do not fix. List ordered fixes.
 
 Then a short fix session for whatever it found.
@@ -336,4 +337,4 @@ Call it half a day if mock-first; a day if you also prove a live transaction.
 - State management: BLoC — flutter_bloc Cubits
 - Default run: mock for dev/tests; README leads with live
 - Stretch (P4b only, never in Session 1): Request button → transition/request (shows you understood the process without building a full inbox)
-- Decisions this plan assumes are recorded in docs/q-and-a.md → "Working decisions"
+- Decisions this plan assumes are recorded in docs/q-and-a.md → "Working decisions"; the reasons are in docs/adr/ (index: .claude/second-brain/decisions.md)
