@@ -98,9 +98,9 @@ Screens (simple, functional):
 | /listings/:id (optional) | description + Request using transition/request |
 
 Phase DAG (what runs, in order)
-- P0  Harness          AGENTS.md, Makefile, dart-defines, gitignore
+- P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore — done
 - P1  Process spec     v1 baseline + v2 change + CHANGELOG — agent drafts, you approve; publish in P7
-- P2a Foundations      flutter create, Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore
+- P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore
 - P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
 - P4  Presentation     login + listings + full-app mock widget test
@@ -175,7 +175,7 @@ Do not add a backend. Do not use the Integration API.
 - UI stays simple. Functionality and structure over design.
 ```
 
-Add `flutter_app/Makefile` (recipe lines must start with a real tab, not spaces):
+Right after `flutter create` in P2a (the folder does not exist before that), add `flutter_app/Makefile` (recipe lines must start with a real tab, not spaces):
 
 ```make
 .PHONY: verify
@@ -201,7 +201,7 @@ Prompt (paste as-is):
 ```
 Implement live and mock repository implementations for Auth and Listing. Do not build UI yet. No Transaction repo (that is P4b stretch).
 
-Constraints from AGENTS.md. First build the P2a foundations in flutter_app/: Env (SHARETRIBE_MODE, SHARETRIBE_CLIENT_ID), Result/AppError, data/json_api.dart, lib/data/sharetribe/sharetribe_client.dart (dio + QueuedInterceptor refresh), TokenStore (flutter_secure_storage).
+Constraints from AGENTS.md. First build the P2a foundations: flutter create flutter_app, the Makefile from docs/plan.md step 1, Env (SHARETRIBE_MODE, SHARETRIBE_CLIENT_ID), Result/AppError, data/json_api.dart, lib/data/sharetribe/sharetribe_client.dart (dio + QueuedInterceptor refresh), TokenStore (flutter_secure_storage).
 
 Mock: two users (customer@test.com / password123, provider@test.com / password123), three listings with images as URLs, login/signup/restore/logout, fetchListings.
 
