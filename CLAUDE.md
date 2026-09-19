@@ -8,7 +8,7 @@ A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified 
 
 **No code exists yet.** The repo holds only planning docs:
 - `docs/analysis-of-requirements.md`: scope, planned architecture, definition of done.
-- `docs/q-and-a.md`: open questions for the reviewer. Blockers include marketplace type, which process change to make, and whether the app must start a transaction. Check whether these have answers before building anything that depends on them. If they are still open, use the defaults listed in the "Non-blocking" section and in the analysis doc.
+- `docs/q-and-a.md`: open questions for the reviewer. Blockers include marketplace type, which process change to make, and whether the app must start a transaction. Its "Working decisions" table records the answers the plan assumes and marks each one Assumed, Decided or Open. Recheck an Assumed or Open row before building anything that depends on it.
 - `docs/plan.md`: the phased build plan (P0–P7), agent session prompts, and the locked stack. Follow its "Lock so the agent cannot drift" section.
 
 ## Planned layout
@@ -42,6 +42,7 @@ Toolchain: Flutter 3.47.x stable. Once `flutter_app/` exists, run these from ins
 
 - run (mock, offline): `flutter run --dart-define=SHARETRIBE_MODE=mock`
 - run (live): `flutter run --dart-define=SHARETRIBE_MODE=live --dart-define=SHARETRIBE_CLIENT_ID=<id>`
+- verify (definition of done): `make verify` (runs `flutter analyze` then `flutter test`; includes `test/app_mock_test.dart`, which starts the full app in mock mode)
 - test all: `flutter test`
 - single test: `flutter test test/path/to_test.dart` (add `--plain-name "<name>"` to run one case)
 - lint: `flutter analyze`

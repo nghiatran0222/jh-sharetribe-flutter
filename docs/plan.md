@@ -13,7 +13,7 @@
 
 - Every agent session is gather → act → verify with a runnable stop condition. 
 - “Looks like a login screen” is not done. 
-- `flutter test` && `flutter analyze` (plus a mock-mode run) is done.
+- `make verify` (`flutter analyze` && `flutter test`, including a full-app widget test in mock mode) is done.
 
 ### Principle 3 — Humans own the live marketplace; agents own the repo. 
 
@@ -42,7 +42,7 @@ flutter_app/                   # flutter create                       (P2a)
       json_api.dart            # data + included denormalizer         (P2a)
       sharetribe/              # SharetribeClient (dio), TokenStore   (P2a)
                                # *_repository.dart live impls         (P2)
-      mock/                    # in-memory auth + listings + tx       (P2)
+      mock/                    # in-memory auth + listings (tx: P4b)  (P2)
     domain/                    # models + abstract repos              (P2a)
     presentation/              # Cubits + login, listings pages       (P4)
     app.dart                   # BlocProvider / RepositoryProvider    (P4)
@@ -54,11 +54,12 @@ Definition of done (whole assessment)
 ```
 # Agent-verifiable (no live Sharetribe)
 cd flutter_app
-flutter analyze
-flutter test
-flutter run --dart-define=SHARETRIBE_MODE=mock
+make verify   # flutter analyze && flutter test
+# test/app_mock_test.dart pumps the whole App in mock mode:
+# login as customer@test.com → listings render. No device, no network.
 
-# Human-verifiable (live sandbox)
+# Human-verifiable (device + live sandbox)
+flutter run --dart-define=SHARETRIBE_MODE=mock   # eyeball the UI once
 flex-cli process --path ../sharetribe/simple-request-v2
 flutter run --dart-define=SHARETRIBE_MODE=live \
   --dart-define=SHARETRIBE_CLIENT_ID=...
@@ -100,9 +101,10 @@ Phase DAG (what runs, in order)
 - P0  Harness          AGENTS.md, Makefile, dart-defines, gitignore
 - P1  Process spec     v1 baseline + v2 change + CHANGELOG — agent drafts, you approve; publish in P7
 - P2a Foundations      flutter create, Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore
-- P2  Data impl        mock + live Auth/Listing/Transaction repos
+- P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
-- P4  Presentation     login + listings (+ optional request)
+- P4  Presentation     login + listings + full-app mock widget test
+- P4b Stretch          Transaction repo + listing detail Request → transition/request (only after P4 is green)
 - P5  README           root README + Flutter setup
 - P6  Review           adversarial review vs the brief
 - P7  Human live       Console + flex-cli + one live login  [YOU]
@@ -114,7 +116,7 @@ Claude Code vs Grok Build — same plan, different throttle
 | Concern | Claude Code | Grok Build |
 |--|--|--|
 | Start | Plan mode, then default | Plan / this chat, then implement |
-| Durable facts | CLAUDE.md | AGENTS.md + CLAUDE.md (same content) |
+| Durable facts | CLAUDE.md = `@AGENTS.md` (import, not a copy) | AGENTS.md |
 | Parallel | Task subagents (read-only recon vs implement) | spawn_subagent / workflow phases; worktree isolation if two writers |
 | Verify | PostToolUse hook or “run make verify after every change” | Same command in every agent prompt |
 | Review | Fresh /review or a new session | review skill or a read-only reviewer subagent |
@@ -140,7 +142,8 @@ What you type vs what the agent types
 1. Write the harness file first (5 min, you or a tiny agent session)
 
 ```
-Put this at AGENTS.md in the repo root (copy into CLAUDE.md):
+Put this at AGENTS.md in the repo root. Merge in the facts from the current CLAUDE.md, then
+reduce CLAUDE.md to the single line `@AGENTS.md` (Claude Code imports it), so there is one source of truth:
 
 # Sharetribe Flutter assessment
 
@@ -153,7 +156,8 @@ presentation → domain repositories → data (mock | live SharetribeClient)
 Do not add a backend. Do not use the Integration API.
 
 ## Commands
-- test: `cd flutter_app && flutter test`
+- verify (definition of done): `cd flutter_app && make verify`
+- test: `cd flutter_app && flutter test` (one file: `flutter test test/<file>_test.dart`)
 - lint: `cd flutter_app && flutter analyze`
 - run mock: `flutter run --dart-define=SHARETRIBE_MODE=mock`
 - run live: `flutter run --dart-define=SHARETRIBE_MODE=live --dart-define=SHARETRIBE_CLIENT_ID=...`
@@ -162,7 +166,8 @@ Do not add a backend. Do not use the Integration API.
 - Never commit SHARETRIBE_CLIENT_ID or any client secret.
 - Never put Integration API secret in the app.
 - Do not edit sharetribe/simple-request*/process.edn unless asked.
-- Mock mode is default and must run without network.
+- Mock mode is the default for dev and tests and must run without network. The README leads with the live run.
+- Image variants may be missing from a response; the mapper returns a null image, never throws.
 - JSON:API parsing stays in data/json_api.dart + Listing.fromJsonApi.
 - Token refresh lives only in the dio QueuedInterceptor: one refresh per 401 burst, rotated refresh token persisted.
 - Transactions use simple-request/release-2. Never move or edit release-1.
@@ -170,12 +175,13 @@ Do not add a backend. Do not use the Integration API.
 - UI stays simple. Functionality and structure over design.
 ```
 
-Add `flutter_app/Makefile`:
+Add `flutter_app/Makefile` (recipe lines must start with a real tab, not spaces):
 
-```
+```make
+.PHONY: verify
 verify:
-    flutter analyze
-    flutter test
+	flutter analyze
+	flutter test
 ```
 
 2. Session 0 — Plan only (both tools)
@@ -193,13 +199,13 @@ Expected: it should find nothing built yet and order the work P1 → P2a → P2/
 Prompt (paste as-is):
 
 ```
-Implement live and mock repository implementations for Auth, Listing, and Transaction. Do not build UI yet.
+Implement live and mock repository implementations for Auth and Listing. Do not build UI yet. No Transaction repo (that is P4b stretch).
 
 Constraints from AGENTS.md. First build the P2a foundations in flutter_app/: Env (SHARETRIBE_MODE, SHARETRIBE_CLIENT_ID), Result/AppError, data/json_api.dart, lib/data/sharetribe/sharetribe_client.dart (dio + QueuedInterceptor refresh), TokenStore (flutter_secure_storage).
 
-Mock: two users (customer@test.com / password123, provider@test.com / password123), three listings with images as URLs, login/signup/restore/logout, fetchListings, requestListing.
+Mock: two users (customer@test.com / password123, provider@test.com / password123), three listings with images as URLs, login/signup/restore/logout, fetchListings.
 
-Live: password grant scope=user, current user show, listings query with include=author,images, initiate simple-request/release-2 + transition/request.
+Live: password grant scope=user, current user show, listings query with include=author,images plus an explicit image variant (e.g. fields.image=variants.landscape-crop). Missing variants map to a null image.
 
 Tests first, injecting a Dio with a fake HttpClientAdapter. Cover: JSON:API denormalize, 401→refresh→retry, parallel 401s → exactly one refresh, rotated refresh token persisted, mock login failure, listing parse with included author+image.
 
@@ -213,11 +219,12 @@ Replace the counter `main.dart` with a small app:
 - `App` wires Env, TokenStore, repos (mock vs live from Env) via RepositoryProvider, and Cubits via BlocProvider.
 - AuthCubit + LoginPage: email, password, error, loading.
 - ListingsCubit + ListingsPage: restore session on launch; if no session → login; else list; pull-to-refresh; empty/error; logout.
-- Optional ListingDetail with Request (customer note).
+- Replace the counter smoke test with test/app_mock_test.dart: pump `App` in mock mode, log in as customer@test.com, expect three listing titles.
 
 flutter_bloc Cubits only (test them with bloc_test). Material 3, no design system.
-Update widget tests. `make verify` must stay green.
-Mock mode must show listings without network.
+`make verify` must stay green; the app_mock_test is the proof that mock mode shows listings without network.
+
+Session 2b (stretch, P4b, only after Session 2 is green): TransactionRepository (mock + live: initiate simple-request/release-2 with transition/request) and a ListingDetail page with a Request button (customer note). Same verify.
 
 5. Session 3 — README (submission artifact)
 
@@ -225,7 +232,7 @@ Root `README.md` must contain:
 - What this is (assessment map)
 - Prerequisites (Flutter, optional Node/`flex-cli`)
 - Sharetribe: create marketplace, publish v1 as `release-1`, push v2, create `release-2`, point the listing type at it, create listing (link to `sharetribe/README.md`)
-- Flutter mock run and live run
+- Flutter live run first (this is what the brief asks for), then the mock run as the offline fallback
 - Test users
 - “Transaction process changes” — ½ page that points at `simple-request-v2/CHANGELOG.md` and restates the why in reviewer English, including why a new `release-2` alias leaves transactions started on v1 untouched
 - Security note: Client ID is public; secret never in the app
@@ -242,6 +249,15 @@ Then a short fix session for whatever it found.
 7. Human live gate
 
 ```bash
+export MID=<your-marketplace-id>   # marketplace ID from Console
+flex-cli login
+
+# First publish only: v1 becomes version 1 behind release-1
+flex-cli process --path sharetribe/simple-request
+flex-cli process create --process simple-request --path sharetribe/simple-request -m $MID
+flex-cli process create-alias --process simple-request --alias release-1 --version 1 -m $MID
+
+# The change: v2 becomes version 2 behind a new release-2
 flex-cli process --path sharetribe/simple-request-v2
 flex-cli process push --process simple-request --path sharetribe/simple-request-v2 -m $MID
 flex-cli process create-alias --process simple-request --alias release-2 --version 2 -m $MID
@@ -249,7 +265,7 @@ flex-cli process create-alias --process simple-request --alias release-2 --versi
 
 `release-1` stays on version 1; it is never moved. In Console, point the listing type's transaction process at `simple-request/release-2`.
 
-Then run live, log in, confirm listings. If listings are empty, the failure is gather (no published listing in Console), not Flutter.
+Then run live, log in, confirm listings. If listings are empty, the failure is gather (no published listing in Console), not Flutter. If images are missing, check which variants the sandbox returns and adjust fields.image.
 
 8. Grok Build workflow shape (if you want orchestration)
 
@@ -280,7 +296,7 @@ Foundations, mock+live repos and their tests (Session 1) are merged; main.dart i
 
 Build: login + listings UI with Cubits, widget tests, root README.
 Follow AGENTS.md. After every change run flutter analyze && flutter test.
-Stop when mock run would show listings and README explains process v2 + setup.
+Stop when make verify is green (including test/app_mock_test.dart) and README explains process v2 + setup.
 Never commit secrets.
 ```
 
@@ -318,5 +334,6 @@ Call it half a day if mock-first; a day if you also prove a live transaction.
 - HTTP: dio + QueuedInterceptor (single-flight refresh on 401)
 - Listings query: include=author,images
 - State management: BLoC — flutter_bloc Cubits
-- Default run: mock
-- Stretch: Request button → transition/request (shows you understood the process without building a full inbox)
+- Default run: mock for dev/tests; README leads with live
+- Stretch (P4b only, never in Session 1): Request button → transition/request (shows you understood the process without building a full inbox)
+- Decisions this plan assumes are recorded in docs/q-and-a.md → "Working decisions"

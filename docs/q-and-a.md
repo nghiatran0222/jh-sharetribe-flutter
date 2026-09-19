@@ -32,6 +32,25 @@ These are the gaps in the brief.
 
 ---
 
+## Working decisions (assumed by docs/plan.md until answered)
+
+| Question | Working answer | Status |
+|--|--|--|
+| Blocker 1 — Marketplace | New Flex trial from scratch; you run Console + flex-cli (P7) | Assumed |
+| Blocker 2 — Marketplace type | Request-based, no payment: custom `simple-request` process | Assumed |
+| Blocker 3 — Modification | v2 adds a real step (recommended: provider-accept, request-to-book); shipped as new `release-2` alias, `release-1` untouched | Assumed — confirm the exact change in P1 |
+| Blocker 4 — Transaction in app | Not required. Login + listings; Request button is stretch (P4b) | Assumed |
+| Important 1 — Auth surface | Login + logout + session restore; signup optional | Assumed |
+| Important 2 — Listings visibility | After login only | Assumed |
+| Important 3 — Payments | No Stripe | Assumed |
+| Important 4 — Targets / versions | Flutter 3.47.x stable; platforms not decided | Open |
+| Important 5 — State management | BLoC (flutter_bloc Cubits) | Decided |
+| Important 6 — Submission form | Not decided | Open |
+| Non-blocking — Networking | dio + QueuedInterceptor (single-flight refresh) | Decided |
+| Non-blocking — Run modes | Mock is default for dev/tests; README leads with the live run | Decided |
+
+---
+
 ## Risks will notice
 
 1. Putting the Integration API secret in Flutter.
