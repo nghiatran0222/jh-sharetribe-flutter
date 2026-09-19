@@ -1,4 +1,4 @@
-# Jh - Sharetribe - Flutter
+# Jh-sharetribe-flutter
 
 ## Assessment Requirements
 
@@ -26,3 +26,10 @@ Complete Flutter, API integration, authentication, and Sharetribe:
 ### 4. Timeline
 
 - 3 days.
+
+## [Analysis of Requirements](./docs/analysis-of-requirements.md)
+
+
+## [Q&A](./docs/q-and-a.md)
+
+- Need answers before building
