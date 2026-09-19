@@ -12,5 +12,6 @@ Index only. The ADRs themselves live in `docs/adr/`. Add one line here per ADR, 
 | [0006](../../docs/adr/0006-agents-md-single-source.md) | AGENTS.md single source; CLAUDE.md = `@AGENTS.md` | Accepted | P0 |
 | [0007](../../docs/adr/0007-v2-provider-accept.md) | v2 adds provider accept/decline + 3-day expiry | Accepted | P1 |
 | [0008](../../docs/adr/0008-hand-written-no-payment-baseline.md) | Hand-written minimal no-payment v1 baseline | Accepted | P1 |
+| [0011](../../docs/adr/0011-models-before-code.md) | Process and domain models come before code (MDD) | Accepted | P1–P2 |
 
 Planned: 0009 Result/AppError over exceptions (P2a) · 0010 token storage (P2a)

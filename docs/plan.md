@@ -203,6 +203,8 @@ Implement live and mock repository implementations for Auth and Listing. Do not 
 
 Constraints from AGENTS.md. First build the P2a foundations: flutter create flutter_app, the Makefile from docs/plan.md step 1, Env (SHARETRIBE_MODE, SHARETRIBE_CLIENT_ID), Result/AppError, data/json_api.dart, lib/data/sharetribe/sharetribe_client.dart (dio + QueuedInterceptor refresh), TokenStore (flutter_secure_storage).
 
+Models first (ADR 0011): write domain/ models + abstract Auth/Listing repositories before any repo code; mock and live both implement them. Use process names verbatim (transition/request, simple-request/release-2).
+
 Mock: two users (customer@test.com / password123, provider@test.com / password123), three listings with images as URLs, login/signup/restore/logout, fetchListings.
 
 Live: password grant scope=user, current user show, listings query with include=author,images plus an explicit image variant (e.g. fields.image=variants.landscape-crop). Missing variants map to a null image.
@@ -242,7 +244,7 @@ Root `README.md` must contain:
 
 Review this repo as a hiring bar for Senior Flutter (API + auth + Sharetribe).
 Read the brief requirements. For each: pass / fail / gap, with file evidence.
-Hunt: code that contradicts an Accepted ADR in docs/adr/, secrets in git, Integration API in Flutter, JSON parsed as plain maps in widgets, session not restored, process edited in place, counter UI left behind, tests still the counter test, README that cannot be followed.
+Hunt: code that contradicts an Accepted ADR in docs/adr/, secrets in git, Integration API in Flutter, JSON parsed as plain maps in widgets, session not restored, process edited in place, code that diverges from process.edn names (transitions, alias), counter UI left behind, tests still the counter test, README that cannot be followed.
 Do not fix. List ordered fixes.
 
 Then a short fix session for whatever it found.
