@@ -22,8 +22,8 @@
 
 | Requirement | State now | Agent may close it? |
 |--|--|--|
-| Sharetribe setup + simple process | Not started — no `sharetribe/` yet | Files yes (P1); publish no — you run flex-cli (P7) |
-| Process modification + explanation | Not started | Drafts v2 + CHANGELOG.md (P1); you approve the change |
+| Sharetribe setup + simple process | P1 done: `sharetribe/simple-request/`; publish in P7 | Files yes (P1); publish no — you run flex-cli (P7) |
+| Process modification + explanation | P1 done: `simple-request-v2/` + CHANGELOG.md, ADR 0007 | Drafts v2 + CHANGELOG.md (P1); you approve the change |
 | Flutter auth | Not started — no `flutter_app/` yet | Yes |
 | Fetch + display listings | Not started | Yes |
 | Source + README + process note | Brief + docs/ only; no root README | Yes |
@@ -99,7 +99,7 @@ Screens (simple, functional):
 
 Phase DAG (what runs, in order)
 - P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore, ADRs 0001–0006 — done
-- P1  Process spec     v1 baseline + v2 change + CHANGELOG + ADR 0007 (v2 change) / 0008 (v1 source) — agent drafts, you approve; publish in P7
+- P1  Process spec     v1 baseline + v2 change + CHANGELOG + ADR 0007 (v2 change) / 0008 (v1 source) — done (approved 2026-09-20; process.edn frozen); publish in P7
 - P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage)
 - P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
@@ -264,7 +264,7 @@ flex-cli process push --process simple-request --path sharetribe/simple-request-
 flex-cli process create-alias --process simple-request --alias release-2 --version 2 -m $MID
 ```
 
-`release-1` stays on version 1; it is never moved. In Console, point the listing type's transaction process at `simple-request/release-2`.
+`release-1` stays on version 1; it is never moved. The app selects v2 by sending `processAlias: simple-request/release-2` on `transactions/initiate`. If you also use the Sharetribe Web Template, set its listing type to `simple-request/release-2`. The full sequence is in `sharetribe/README.md`.
 
 Then run live, log in, confirm listings. If listings are empty, the failure is gather (no published listing in Console), not Flutter. If images are missing, check which variants the sandbox returns and adjust fields.image.
 

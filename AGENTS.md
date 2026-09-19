@@ -6,7 +6,7 @@ Guidance for coding agents (Claude Code reads it via `CLAUDE.md` → `@AGENTS.md
 
 A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified transaction process, plus a **Flutter** app that logs in to Sharetribe and lists listings. The full brief is in `README.md`.
 
-**No app or process code exists yet.** Planning docs:
+**Status:** the Sharetribe process v1/v2 (P1) is approved and frozen in `sharetribe/`. No Flutter code exists yet. Planning docs:
 - `docs/plan.md`: phased build plan (P0–P7), agent session prompts, human gates. Its "Lock so the agent cannot drift" section is binding.
 - `docs/q-and-a.md`: questions for the reviewer. Its "Working decisions" table marks each answer Assumed, Decided or Open. Recheck an Assumed or Open row before building anything that depends on it.
 - `docs/analysis-of-requirements.md`: scope and reasoning behind the plan.
@@ -44,7 +44,7 @@ Do not add a backend. Do not use the Integration API.
 - **JSON:API:** `data` + `included` (author, images) are denormalized in `data/json_api.dart` and mapped by `Listing.fromJsonApi`. Widgets never parse raw maps.
 - **Auth loop:** log in → store access + refresh tokens with flutter_secure_storage → a dio `QueuedInterceptor` adds `Authorization: Bearer` → on a 401, refresh once and retry (one refresh even when several requests fail at once; persist the rotated refresh token) → logout clears the tokens → restore the session on launch.
 - **Run modes** come from dart-defines: `SHARETRIBE_MODE` (`mock` | `live`, default `mock`) and `SHARETRIBE_CLIENT_ID` (live only), read by `core/Env`.
-- **Process versioning:** v2 ships as a new version behind a new `simple-request/release-2` alias, and the listing type is re-pointed to it. `release-1` stays on version 1. Transactions already started on v1 keep running on v1.
+- **Process versioning:** v2 (provider accept/decline, 3-day expiry, ADR 0007) ships as a new version behind a new `simple-request/release-2` alias. The app picks it by sending `processAlias: simple-request/release-2` with `transition/request` on `transactions/initiate`. `release-1` stays on version 1. Transactions already started on v1 keep running on v1.
 - **UI:** Material 3, no design system. Listings need loading, empty and error states, pull-to-refresh, and logout. Functionality and structure come before visuals.
 
 ## Commands
@@ -56,6 +56,10 @@ Run from `flutter_app/` once it exists (created in P2a):
 - lint: `flutter analyze`
 - run mock (offline): `flutter run --dart-define=SHARETRIBE_MODE=mock`
 - run live: `flutter run --dart-define=SHARETRIBE_MODE=live --dart-define=SHARETRIBE_CLIENT_ID=<id>`
+
+From the repo root:
+
+- process check (offline, structure only): `python3 scripts/check_process.py sharetribe/simple-request sharetribe/simple-request-v2`. The real validator is `flex-cli process --path <dir>`, a human step (see `sharetribe/README.md`).
 
 ## Rules
 

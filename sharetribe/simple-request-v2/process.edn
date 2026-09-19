@@ -1,0 +1,90 @@
+;; simple-request v2: provider must accept (request-to-book), no payment.
+;; Change from v1: transition/request now lands in state/pending instead of
+;; state/accepted. The provider accepts or declines; unanswered requests expire
+;; after 3 days; the customer can withdraw while pending. Everything from
+;; state/accepted onward is unchanged.
+{:format :v3,
+ :transitions
+ [{:name :transition/request,
+   :actor :actor.role/customer,
+   :actions [{:name :action/update-protected-data}],
+   :to :state/pending}
+  {:name :transition/accept,
+   :actor :actor.role/provider,
+   :actions [],
+   :from :state/pending,
+   :to :state/accepted}
+  {:name :transition/decline,
+   :actor :actor.role/provider,
+   :actions [],
+   :from :state/pending,
+   :to :state/declined}
+  {:name :transition/withdraw,
+   :actor :actor.role/customer,
+   :actions [],
+   :from :state/pending,
+   :to :state/withdrawn}
+  {:name :transition/expire,
+   :at
+   {:fn/plus
+    [{:fn/timepoint [:time/first-entered-state :state/pending]}
+     {:fn/period ["P3D"]}]},
+   :actions [],
+   :from :state/pending,
+   :to :state/expired}
+  {:name :transition/complete,
+   :actor :actor.role/provider,
+   :actions [],
+   :from :state/accepted,
+   :to :state/completed}
+  {:name :transition/cancel,
+   :actor :actor.role/customer,
+   :actions [],
+   :from :state/accepted,
+   :to :state/canceled}
+  {:name :transition/operator-cancel,
+   :actor :actor.role/operator,
+   :actions [],
+   :from :state/accepted,
+   :to :state/canceled}],
+ :notifications
+ [{:name :notification/new-request,
+   :on :transition/request,
+   :to :actor.role/provider,
+   :template :sr-new-request}
+  {:name :notification/request-accepted,
+   :on :transition/accept,
+   :to :actor.role/customer,
+   :template :sr-request-accepted}
+  {:name :notification/request-declined,
+   :on :transition/decline,
+   :to :actor.role/customer,
+   :template :sr-request-declined}
+  {:name :notification/request-withdrawn,
+   :on :transition/withdraw,
+   :to :actor.role/provider,
+   :template :sr-request-withdrawn}
+  {:name :notification/request-expired-customer,
+   :on :transition/expire,
+   :to :actor.role/customer,
+   :template :sr-request-expired}
+  {:name :notification/request-expired-provider,
+   :on :transition/expire,
+   :to :actor.role/provider,
+   :template :sr-request-expired}
+  {:name :notification/completed,
+   :on :transition/complete,
+   :to :actor.role/customer,
+   :template :sr-completed}
+  {:name :notification/canceled,
+   :on :transition/cancel,
+   :to :actor.role/provider,
+   :template :sr-canceled}
+  {:name :notification/operator-canceled-customer,
+   :on :transition/operator-cancel,
+   :to :actor.role/customer,
+   :template :sr-canceled}
+  {:name :notification/operator-canceled-provider,
+   :on :transition/operator-cancel,
+   :to :actor.role/provider,
+   :template :sr-canceled}]}

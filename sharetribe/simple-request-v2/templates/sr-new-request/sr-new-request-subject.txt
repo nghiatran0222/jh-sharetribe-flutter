@@ -1,0 +1,1 @@
+{{transaction.customer.display-name}} sent a request for {{transaction.listing.title}}

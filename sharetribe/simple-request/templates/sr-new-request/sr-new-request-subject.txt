@@ -1,0 +1,1 @@
+New confirmed request for {{transaction.listing.title}}

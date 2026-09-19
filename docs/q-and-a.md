@@ -39,12 +39,12 @@ A row can only be *Decided* once it links to an ADR in `docs/adr/`.
 | Question | Working answer | Status | ADR |
 |--|--|--|--|
 | Blocker 1 — Marketplace | New Flex trial from scratch; you run Console + flex-cli (P7) | Assumed | — |
-| Blocker 2 — Marketplace type | Request-based, no payment: custom `simple-request` process | Assumed | — |
-| Blocker 3 — Modification | v2 adds a real step (recommended: provider-accept, request-to-book); shipped as new `release-2` alias, `release-1` untouched | Assumed — confirm the exact change in P1 | [0003](adr/0003-process-versioning-release-2-alias.md) (alias); 0007 in P1 (change) |
+| Blocker 2 — Marketplace type | Request-based, no payment: custom `simple-request` process | Decided | [0008](adr/0008-hand-written-no-payment-baseline.md) |
+| Blocker 3 — Modification | v2 adds provider accept/decline, customer withdraw, 3-day auto-expire; shipped as new `release-2` alias, `release-1` untouched | Decided | [0007](adr/0007-v2-provider-accept.md) (change); [0003](adr/0003-process-versioning-release-2-alias.md) (alias) |
 | Blocker 4 — Transaction in app | Not required. Login + listings; Request button is stretch (P4b) | Assumed | [0005](adr/0005-request-flow-as-stretch.md) |
 | Important 1 — Auth surface | Login + logout + session restore; signup optional | Assumed | — |
 | Important 2 — Listings visibility | After login only | Assumed | — |
-| Important 3 — Payments | No Stripe | Assumed | — |
+| Important 3 — Payments | No Stripe | Decided | [0008](adr/0008-hand-written-no-payment-baseline.md) |
 | Important 4 — Targets / versions | Flutter 3.47.x stable; platforms not decided | Open | — |
 | Important 5 — State management | BLoC (flutter_bloc Cubits) | Decided | [0001](adr/0001-flutter-bloc-cubits.md) |
 | Important 6 — Submission form | Not decided | Open | — |

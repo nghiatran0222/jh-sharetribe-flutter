@@ -1,0 +1,44 @@
+;; simple-request v1: instant confirmation, no payment.
+;; The customer's request is confirmed immediately; the provider only completes it.
+{:format :v3,
+ :transitions
+ [{:name :transition/request,
+   :actor :actor.role/customer,
+   :actions [{:name :action/update-protected-data}],
+   :to :state/accepted}
+  {:name :transition/complete,
+   :actor :actor.role/provider,
+   :actions [],
+   :from :state/accepted,
+   :to :state/completed}
+  {:name :transition/cancel,
+   :actor :actor.role/customer,
+   :actions [],
+   :from :state/accepted,
+   :to :state/canceled}
+  {:name :transition/operator-cancel,
+   :actor :actor.role/operator,
+   :actions [],
+   :from :state/accepted,
+   :to :state/canceled}],
+ :notifications
+ [{:name :notification/new-request,
+   :on :transition/request,
+   :to :actor.role/provider,
+   :template :sr-new-request}
+  {:name :notification/completed,
+   :on :transition/complete,
+   :to :actor.role/customer,
+   :template :sr-completed}
+  {:name :notification/canceled,
+   :on :transition/cancel,
+   :to :actor.role/provider,
+   :template :sr-canceled}
+  {:name :notification/operator-canceled-customer,
+   :on :transition/operator-cancel,
+   :to :actor.role/customer,
+   :template :sr-canceled}
+  {:name :notification/operator-canceled-provider,
+   :on :transition/operator-cancel,
+   :to :actor.role/provider,
+   :template :sr-canceled}]}
