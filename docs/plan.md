@@ -100,7 +100,7 @@ Screens (simple, functional):
 Phase DAG (what runs, in order)
 - P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore, ADRs 0001–0006 — done
 - P1  Process spec     v1 baseline + v2 change + CHANGELOG + ADR 0007 (v2 change) / 0008 (v1 source) — done (approved 2026-09-20; process.edn frozen); publish in P7
-- P2a Foundations      flutter create (Flutter 3.47.4, `.fvmrc`, ADR 0013), Makefile (verify, `$(FLUTTER)`), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage); then add the verify hooks (ADR 0012)
+- P2a Foundations      flutter create --platforms=android,ios (Flutter 3.47.4, `.fvmrc`, ADR 0013), Makefile (verify, `$(FLUTTER)`), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage); then add the verify hooks (ADR 0012)
 - P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
 - P4  Presentation     login + listings + full-app mock widget test
@@ -207,7 +207,7 @@ Prompt (paste as-is):
 ```
 Implement live and mock repository implementations for Auth and Listing. Do not build UI yet. No Transaction repo (that is P4b stretch).
 
-Constraints from AGENTS.md. First build the P2a foundations: flutter create flutter_app, the Makefile from docs/plan.md step 1, Env (SHARETRIBE_MODE, SHARETRIBE_CLIENT_ID), Result/AppError, data/json_api.dart, lib/data/sharetribe/sharetribe_client.dart (dio + QueuedInterceptor refresh), TokenStore (flutter_secure_storage).
+Constraints from AGENTS.md. First build the P2a foundations: flutter create --platforms=android,ios flutter_app (Android + iOS only; q-and-a Important 4), the Makefile from docs/plan.md step 1, Env (SHARETRIBE_MODE, SHARETRIBE_CLIENT_ID), Result/AppError, data/json_api.dart, lib/data/sharetribe/sharetribe_client.dart (dio + QueuedInterceptor refresh), TokenStore (flutter_secure_storage).
 
 Models first (ADR 0011): write domain/ models + abstract Auth/Listing repositories before any repo code; mock and live both implement them. Use process names verbatim (transition/request, simple-request/release-2).
 
