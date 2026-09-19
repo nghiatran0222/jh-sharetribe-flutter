@@ -9,6 +9,7 @@ A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified 
 **No code exists yet.** The repo holds only planning docs:
 - `docs/analysis-of-requirements.md`: scope, planned architecture, definition of done.
 - `docs/q-and-a.md`: open questions for the reviewer. Blockers include marketplace type, which process change to make, and whether the app must start a transaction. Check whether these have answers before building anything that depends on them. If they are still open, use the defaults listed in the "Non-blocking" section and in the analysis doc.
+- `docs/plan.md`: the phased build plan (P0–P7), agent session prompts, and the locked stack. Follow its "Lock so the agent cannot drift" section.
 
 ## Planned layout
 
@@ -20,7 +21,7 @@ flutter_app/
   lib/
     data/              # REST client (dio), token storage, DTOs
     domain/            # Listing, User, failures, use cases
-    presentation/      # login + listings screens (BLoC recommended)
+    presentation/      # login + listings screens (flutter_bloc Cubits)
 ```
 
 ## Architecture decisions (from the analysis doc)
@@ -30,16 +31,17 @@ flutter_app/
   - `GET https://flex-api.sharetribe.com/v1/listings?include=author,images`
 - **Two APIs, two trust levels.** The Marketplace API uses the Client ID and a user token, and it is the only API the Flutter app may use. The Integration API uses the Client Secret, so the secret must **never** reach the app or the repo.
 - **Responses are JSON:API.** Denormalize `data` + `included` (author, images) in the data layer and map them to domain models. Widgets should never parse raw maps.
-- **Auth loop:** log in → store access + refresh tokens in `flutter_secure_storage` → a dio interceptor adds `Authorization: Bearer` → on a 401, refresh once and retry → logout clears the stored tokens → restore the session on launch.
+- **Auth loop:** log in → store access + refresh tokens in `flutter_secure_storage` → a dio `QueuedInterceptor` adds `Authorization: Bearer` → on a 401, refresh once (a single refresh even when several requests fail at once) and retry → logout clears the stored tokens → restore the session on launch.
 - **Client ID** comes from `--dart-define` (or a gitignored `.env`), never hard-coded.
-- **Transaction process changes ship as a new release.** Publish `…/release-2` and re-point the listing type to it. Never edit a live alias in place. The change must add real behavior, such as a new state, actor transition, or privileged operator step, not just rename something. The recommended change is request-to-book (a provider-accept step).
+- **Transaction process changes ship as a new release.** Push the new version, create a new `simple-request/release-2` alias, and re-point the listing type to it. `release-1` stays on version 1, so never move or edit it. The change must add real behavior, such as a new state, actor transition, or privileged operator step, not just rename something. The recommended change is request-to-book (a provider-accept step).
 - The listings UI needs loading, empty, and error states, plus pull-to-refresh. Styling is Material 3 with no design system. The priority is functionality and structure, not visuals.
 
 ## Commands
 
 Toolchain: Flutter 3.47.x stable. Once `flutter_app/` exists, run these from inside it:
 
-- run: `flutter run --dart-define=SHARETRIBE_CLIENT_ID=<id>` (the variable name will be final once the code exists)
+- run (mock, offline): `flutter run --dart-define=SHARETRIBE_MODE=mock`
+- run (live): `flutter run --dart-define=SHARETRIBE_MODE=live --dart-define=SHARETRIBE_CLIENT_ID=<id>`
 - test all: `flutter test`
 - single test: `flutter test test/path/to_test.dart` (add `--plain-name "<name>"` to run one case)
 - lint: `flutter analyze`
