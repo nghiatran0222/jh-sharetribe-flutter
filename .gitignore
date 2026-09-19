@@ -123,3 +123,5 @@ app.*.symbols
 .env
 .env.*
 !.env.example
+# FVM: commit .fvmrc (ADR 0013), ignore the local SDK link.
+.fvm/

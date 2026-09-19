@@ -15,7 +15,7 @@ A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified 
 
 ## Stack
 
-Dart 3 / Flutter 3.47.x stable, flutter_bloc (Cubit), dio, flutter_secure_storage.
+Dart 3 / Flutter 3.47.4 stable (pinned in `.fvmrc`; FVM optional, no Melos: ADR 0013), flutter_bloc (Cubit), dio, flutter_secure_storage.
 Sharetribe Marketplace API (JSON:API) over REST. There is no official Flutter/Dart SDK.
 
 ## Layout (planned)
@@ -52,7 +52,7 @@ Do not add a backend. Do not use the Integration API.
 
 Run from `flutter_app/` once it exists (created in P2a):
 
-- verify (definition of done): `make verify` (runs `flutter analyze` then `flutter test`, including `test/app_mock_test.dart`, which starts the full app in mock mode)
+- verify (definition of done): `make verify` (runs `flutter analyze` then `flutter test`, including `test/app_mock_test.dart`, which starts the full app in mock mode). With FVM: `make verify FLUTTER="fvm flutter"`, and prefix the commands below with `fvm`.
 - test: `flutter test`; one file: `flutter test test/<file>_test.dart`; one case: add `--plain-name "<name>"`
 - lint: `flutter analyze`
 - run mock (offline): `flutter run --dart-define=SHARETRIBE_MODE=mock`

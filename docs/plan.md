@@ -100,7 +100,7 @@ Screens (simple, functional):
 Phase DAG (what runs, in order)
 - P0  Harness          AGENTS.md (+ CLAUDE.md = @AGENTS.md), dart-define names, gitignore, ADRs 0001–0006 — done
 - P1  Process spec     v1 baseline + v2 change + CHANGELOG + ADR 0007 (v2 change) / 0008 (v1 source) — done (approved 2026-09-20; process.edn frozen); publish in P7
-- P2a Foundations      flutter create, Makefile (verify), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage); then add the verify hooks (ADR 0012)
+- P2a Foundations      flutter create (Flutter 3.47.4, `.fvmrc`, ADR 0013), Makefile (verify, `$(FLUTTER)`), Env, Result/AppError, JsonApi, SharetribeClient (dio), TokenStore + ADR 0009 (Result/AppError) / 0010 (token storage); then add the verify hooks (ADR 0012)
 - P2  Data impl        mock + live Auth/Listing repos (Transaction repo is stretch — P4b)
 - P3  Tests            JSON:API, token refresh, mock auth, listing parse
 - P4  Presentation     login + listings + full-app mock widget test
@@ -180,10 +180,13 @@ Do not add a backend. Do not use the Integration API.
 Right after `flutter create` in P2a (the folder does not exist before that), add `flutter_app/Makefile` (recipe lines must start with a real tab, not spaces):
 
 ```make
+# Flutter 3.47.4 is pinned in ../.fvmrc (ADR 0013). FVM users: make verify FLUTTER="fvm flutter"
+FLUTTER ?= flutter
+
 .PHONY: verify
 verify:
-	flutter analyze
-	flutter test
+	$(FLUTTER) analyze
+	$(FLUTTER) test
 ```
 
 2. Session 0 — Plan only (both tools)

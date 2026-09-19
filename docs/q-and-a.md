@@ -45,7 +45,7 @@ A row can only be *Decided* once it links to an ADR in `docs/adr/`.
 | Important 1 — Auth surface | Login + logout + session restore; signup optional | Assumed | — |
 | Important 2 — Listings visibility | After login only | Assumed | — |
 | Important 3 — Payments | No Stripe | Decided | [0008](adr/0008-hand-written-no-payment-baseline.md) |
-| Important 4 — Targets / versions | Flutter 3.47.x stable; platforms not decided | Open | — |
+| Important 4 — Targets / versions | Flutter 3.47.4 stable, pinned in `.fvmrc` (FVM optional); platforms not decided | Version: Decided · Platforms: Open | [0013](adr/0013-fvm-pin-no-melos.md) (version) |
 | Important 5 — State management | BLoC (flutter_bloc Cubits) | Decided | [0001](adr/0001-flutter-bloc-cubits.md) |
 | Important 6 — Submission form | Not decided | Open | — |
 | Non-blocking — Networking | dio + QueuedInterceptor (single-flight refresh) | Decided | [0002](adr/0002-dio-queued-interceptor.md) |
