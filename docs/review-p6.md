@@ -34,7 +34,7 @@ The review's two MUST findings — the ones it said sank the submission — are 
 
 | # | Finding | Why it is still open |
 |--|--|--|
-| 16 | The Android target has never been built; every screenshot is the iPhone 15 simulator, while `docs/q-and-a.md` claims Android + iOS. Also ADR 0010's `minSdk` note was never written. | Needs one Android build, or the claim narrowed. |
+| 16 | The Android target had never been built; every screenshot is the iPhone 15 simulator. | **Partly closed.** The debug APK now builds (Android SDK 36.1.0, no `minSdk` override needed — ADR 0010 updated), and the E2E suite handles Android screenshots via `convertFlutterSurfaceToImage`. The Android E2E run itself was stopped before finishing, so nothing has executed on Android at runtime; the README now says iOS is the verified platform. Finish that run to close this fully. |
 | 19 | No transaction code in the app (`transactions/initiate` with `processAlias: simple-request/release-2`). Defensible under ADR 0005, but it is the only thing that would connect the Flutter half to the Sharetribe half. | P4b stretch; decide whether to build it. |
 | 15 | Stock `flutter create` leftovers: `com.example` bundle id. | The app README and pubspec description are fixed; the bundle id rename is left alone deliberately, since it touches Android and iOS project files and nothing verifies them here. |
 

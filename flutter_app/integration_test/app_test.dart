@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -16,6 +18,17 @@ import 'package:sharetribe_flutter/data/sharetribe/token_store.dart';
 ///     --target=integration_test/app_test.dart -d `<device>`
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  /// Android renders into a surface that cannot be read back directly, so
+  /// it has to be converted once before any screenshot (ADR 0016).
+  var surfaceConverted = false;
+  Future<void> screenshot(String name) async {
+    if (Platform.isAndroid && !surfaceConverted) {
+      await binding.convertFlutterSurfaceToImage();
+      surfaceConverted = true;
+    }
+    await binding.takeScreenshot(name);
+  }
 
   /// The same wiring `main.dart` uses: mock repositories, real token store.
   Future<void> launchApp(WidgetTester tester) async {
@@ -65,7 +78,7 @@ void main() {
     ) async {
       await launchApp(tester);
       await waitFor(tester, find.widgetWithText(AppBar, 'Log in'));
-      await binding.takeScreenshot('01-login');
+      await screenshot('01-login');
 
       await logIn(tester, password: 'password123');
       await waitFor(tester, find.text('City bike'));
@@ -76,7 +89,7 @@ void main() {
       expect(find.text('15.00 USD'), findsOneWidget);
       // Let the listing images decode before the screenshot is taken.
       await tester.pump(const Duration(seconds: 2));
-      await binding.takeScreenshot('02-listings');
+      await screenshot('02-listings');
 
       // The real Keychain / Keystore now holds the session.
       expect(await SecureTokenStore().read(), isNotNull);
@@ -92,7 +105,7 @@ void main() {
       await waitFor(tester, find.byKey(const Key('login_error')));
 
       expect(find.text('Wrong email or password.'), findsOneWidget);
-      await binding.takeScreenshot('03-login-error');
+      await screenshot('03-login-error');
       expect(await SecureTokenStore().read(), isNull);
     });
   });

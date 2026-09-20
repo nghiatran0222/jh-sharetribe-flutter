@@ -21,7 +21,7 @@ Not built, on purpose: no in-app request flow (the Request button is stretch, [A
 ## Prerequisites
 
 - **Flutter 3.47.4** stable, pinned in [`.fvmrc`](.fvmrc). Any 3.47.x works. With [FVM](https://fvm.app): `fvm use`, then prefix commands with `fvm`.
-- A simulator, emulator or device. Targets are Android and iOS.
+- A simulator, emulator or device. Targets are Android and iOS: the app is built and run on an **iOS simulator** (the screenshots below), and the **Android** debug APK builds against the Flutter default `minSdk` with no override needed. The Android app has not been run end to end yet, so treat iOS as the verified platform.
 - **For the Sharetribe steps only:** Node.js and `npm install -g flex-cli`, plus a Sharetribe account.
 
 ## 1. Sharetribe setup (human step, about 15 minutes)
