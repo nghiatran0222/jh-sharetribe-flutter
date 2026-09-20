@@ -19,5 +19,5 @@ Push v2 as version 2 and create a **new `simple-request/release-2`** alias. Poin
 ## Consequences
 
 - The versioning is visible in names: `release-1` = v1, `release-2` = v2.
-- Clients choose the version via `processAlias` on `transactions/initiate`, so the Flutter app switches by changing its `Env` default. Re-pointing a listing type in Console only matters if the Sharetribe Web Template is also used (confirm in P7).
+- Clients choose the version via `processAlias` on `transactions/initiate`, so the Flutter app will switch by changing one constant when the request flow is built (P4b, ADR 0005); until then the alias is selected in Console on the listing type. Re-pointing a listing type in Console only matters if the Sharetribe Web Template is also used (confirm in P7).
 - The README and the v2 CHANGELOG must explain that transactions started on v1 keep running on v1.

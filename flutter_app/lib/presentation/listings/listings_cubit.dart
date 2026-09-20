@@ -21,12 +21,12 @@ final class ListingsLoaded extends ListingsState {
 
   @override
   bool operator ==(Object other) =>
-      other is ListingsLoaded && _sameIds(other.listings, listings);
+      other is ListingsLoaded && _sameListings(other.listings, listings);
 
   @override
   int get hashCode => Object.hashAll(listings.map((l) => l.id));
 
-  static bool _sameIds(List<Listing> a, List<Listing> b) =>
+  static bool _sameListings(List<Listing> a, List<Listing> b) =>
       a.length == b.length &&
       Iterable.generate(a.length).every((i) => a[i] == b[i]);
 
@@ -41,10 +41,10 @@ final class ListingsFailed extends ListingsState {
 
   @override
   bool operator ==(Object other) =>
-      other is ListingsFailed && other.error.runtimeType == error.runtimeType;
+      other is ListingsFailed && other.error == error;
 
   @override
-  int get hashCode => error.runtimeType.hashCode;
+  int get hashCode => error.hashCode;
 
   @override
   String toString() => 'ListingsFailed($error)';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../data/mock/mock_data.dart' show mockImageAssetScheme;
 import '../../domain/models/listing.dart';
 import '../../domain/models/money.dart';
 
@@ -20,18 +21,33 @@ class ListingTile extends StatelessWidget {
             ? const _NoImage()
             : ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  image.url,
-                  fit: BoxFit.cover,
-                  // Until the first frame arrives, show the placeholder
-                  // rather than an empty box.
-                  frameBuilder: (_, child, frame, wasSynchronouslyLoaded) =>
-                      frame == null && !wasSynchronouslyLoaded
-                      ? const _NoImage()
-                      : child,
-                  // Offline, in tests, or a dead URL: show the placeholder.
-                  errorBuilder: (_, _, _) => const _NoImage(),
-                ),
+                child: image.url.startsWith(mockImageAssetScheme)
+                    // Mock mode: a bundled asset, so no network request.
+                    ? Image.asset(
+                        image.url.substring(mockImageAssetScheme.length),
+                        fit: BoxFit.cover,
+                        // Same as below: never show an empty box while the
+                        // first frame is still being decoded.
+                        frameBuilder:
+                            (_, child, frame, wasSynchronouslyLoaded) =>
+                                frame == null && !wasSynchronouslyLoaded
+                                ? const _NoImage()
+                                : child,
+                        errorBuilder: (_, _, _) => const _NoImage(),
+                      )
+                    : Image.network(
+                        image.url,
+                        fit: BoxFit.cover,
+                        // Until the first frame arrives, show the placeholder
+                        // rather than an empty box.
+                        frameBuilder:
+                            (_, child, frame, wasSynchronouslyLoaded) =>
+                                frame == null && !wasSynchronouslyLoaded
+                                ? const _NoImage()
+                                : child,
+                        // Offline, in tests, or a dead URL: show the placeholder.
+                        errorBuilder: (_, _, _) => const _NoImage(),
+                      ),
               ),
       ),
       title: Text(listing.title),

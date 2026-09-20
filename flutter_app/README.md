@@ -1,17 +1,15 @@
 # sharetribe_flutter
 
-A new Flutter project.
+The Flutter app for the Sharetribe assessment: logs in to a Sharetribe
+marketplace and lists its listings. Setup, credentials and the Sharetribe
+steps are in the [repo README](../README.md).
 
-## Getting Started
+```bash
+make verify                     # flutter analyze + flutter test (the definition of done)
+flutter run                     # mock mode, offline; customer@test.com / password123
+make e2e DEVICE=<device-id>     # end-to-end on a simulator; also writes ../docs/screenshots/
+```
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Layout: `lib/core` (Env, Result, AppError), `lib/domain` (models and
+repository interfaces), `lib/data` (JSON:API, the dio client, mock and live
+repositories), `lib/presentation` (Cubits and pages).

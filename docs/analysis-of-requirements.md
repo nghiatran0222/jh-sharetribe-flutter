@@ -37,7 +37,7 @@ Sharetribe is a headless marketplace backend. Your job is to own the rules of a 
 
 There is no official Flutter/Dart SDK. The correct senior move is REST (dio or http) against:
 - https://flex-api.sharetribe.com/v1/auth/token (password + refresh grants)
-- https://flex-api.sharetribe.com/v1/listings (JSON:API)
+- https://flex-api.sharetribe.com/v1/api/listings/query (JSON:API)
 
 Six methods to execute it
 1. Create a Flex sandbox in Sharetribe Console. Capture Client ID for the app; keep Client Secret off-device.

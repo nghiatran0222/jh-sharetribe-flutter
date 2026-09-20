@@ -7,7 +7,9 @@ import '../../core/app_error.dart';
 import '../../core/result.dart';
 
 /// Runs a repository body and turns every throw into an [Err] (ADR 0009),
-/// so no exception leaves a repository.
+/// so no exception leaves a repository. Used by the live *and* the mock
+/// repositories: both talk to a TokenStore, which can throw a
+/// PlatformException on a real device.
 Future<Result<T>> guard<T>(Future<T> Function() body) async {
   try {
     return Ok(await body());

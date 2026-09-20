@@ -129,6 +129,50 @@ void main() {
     });
   });
 
+  group('given a server that rejects even the refreshed token', () {
+    test(
+      'when a request gets a 401, then the retry does not refresh again',
+      () async {
+        adapter = FakeAdapter((request) {
+          if (request.path.endsWith('/v1/auth/token')) {
+            return FakeResponse(200, tokenBody('a2', 'r2'));
+          }
+          return const FakeResponse(401, {'errors': []});
+        });
+        client = SharetribeClient(
+          clientId: 'client-id',
+          tokenStore: store,
+          dio: Dio()..httpClientAdapter = adapter,
+        );
+
+        await expectLater(
+          client.getApi('current_user/show'),
+          throwsA(isA<DioException>()),
+        );
+
+        // One refresh, and the retry is not refreshed a second time.
+        expect(adapter.requestsTo('/v1/auth/token'), hasLength(1));
+        expect(adapter.requestsTo('/v1/api/current_user/show'), hasLength(2));
+      },
+    );
+  });
+
+  group('given a request that carries its own token', () {
+    test(
+      'when it gets a 401, then the user session is not refreshed',
+      () async {
+        await expectLater(
+          client.postApi('current_user/create', const {}, bearer: 'anon'),
+          throwsA(isA<DioException>()),
+        );
+
+        expect(adapter.requestsTo('/v1/auth/token'), isEmpty);
+        final sent = adapter.requestsTo('/v1/api/current_user/create').single;
+        expect(bearerOf(sent), 'Bearer anon');
+      },
+    );
+  });
+
   group('given no stored tokens', () {
     setUp(() => store = InMemoryTokenStore());
 

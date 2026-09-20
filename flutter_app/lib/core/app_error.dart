@@ -49,6 +49,13 @@ final class ServerError extends AppError {
   final int? statusCode;
 
   @override
+  bool operator ==(Object other) =>
+      other is ServerError && other.statusCode == statusCode;
+
+  @override
+  int get hashCode => statusCode.hashCode;
+
+  @override
   String get message => 'Server error ($statusCode). Please try again.';
 }
 
@@ -58,6 +65,13 @@ final class UnexpectedError extends AppError {
 
   /// For logs; not shown to the user.
   final String detail;
+
+  @override
+  bool operator ==(Object other) =>
+      other is UnexpectedError && other.detail == detail;
+
+  @override
+  int get hashCode => detail.hashCode;
 
   @override
   String get message => 'Something went wrong. Please try again.';

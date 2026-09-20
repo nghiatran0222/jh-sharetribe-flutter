@@ -66,6 +66,11 @@ Map<String, Object?> _listing(
   },
 };
 
+/// Mock images are bundled assets, so mock mode makes no network request
+/// (AGENTS.md: "Mock mode must run without network"). The `asset:` scheme
+/// is understood by `ListingTile`; live images are ordinary https URLs.
+const mockImageAssetScheme = 'asset:';
+
 Map<String, Object?> _image(String n) => {
   'id': 'mock-image-$n',
   'type': 'image',
@@ -75,7 +80,9 @@ Map<String, Object?> _image(String n) => {
         'name': 'landscape-crop',
         'width': 800,
         'height': 600,
-        'url': 'https://picsum.photos/seed/sharetribe-$n/800/600',
+        'url':
+            '$mockImageAssetScheme'
+            'assets/mock/listing-${(int.parse(n) - 1) % 4 + 1}.png',
       },
     },
   },

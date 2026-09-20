@@ -14,7 +14,7 @@ A Sharetribe Flex marketplace with a modified transaction process, plus a Flutte
 
 - Sharetribe process v1 and v2 as `process.edn` + email templates, ready to push. Publishing them needs Console access, so it is a human step (step 1).
 - Flutter: login (password grant, `scope=user`), tokens in Keychain/Keystore, session restore on launch, automatic token refresh on a 401, listings with author, price and image, pull-to-refresh, empty and error states, logout.
-- 66 tests, no device and no network needed.
+- 72 tests, no device and no network needed.
 
 Not built, on purpose: no in-app request flow (the Request button is stretch, [ADR 0005](docs/adr/0005-request-flow-as-stretch.md)), no payments ([ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md)), no sign-up screen (the repository supports it; the brief asks only for authentication).
 
@@ -80,7 +80,7 @@ make verify                            # flutter analyze, then flutter test
 make verify FLUTTER="fvm flutter"      # with FVM
 ```
 
-This is the project's definition of done. It runs 66 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
+This is the project's definition of done. It runs 72 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
 
 The tests that matter most for a reviewer:
 
@@ -184,6 +184,7 @@ One line per record; the reasoning is in the file.
 | [0013](docs/adr/0013-fvm-pin-no-melos.md) | Pin Flutter 3.47.4 with FVM optional; no Melos |
 | [0014](docs/adr/0014-official-flutter-agent-skills-filtered.md) | Official Flutter agent skills, filtered to match this stack |
 | [0015](docs/adr/0015-no-openapi-codegen.md) | No OpenAPI codegen; tested fixtures are the API contract |
+| [0016](docs/adr/0016-e2e-integration-test-and-screenshots.md) | E2E on a simulator for real token storage; screenshots from that run |
 
 ## Repo map
 

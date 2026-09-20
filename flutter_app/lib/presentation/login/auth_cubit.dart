@@ -25,11 +25,11 @@ final class AuthUnauthenticated extends AuthState {
   @override
   bool operator ==(Object other) =>
       other is AuthUnauthenticated &&
-      other.error.runtimeType == error.runtimeType &&
+      other.error == error &&
       other.submitting == submitting;
 
   @override
-  int get hashCode => Object.hash(error.runtimeType, submitting);
+  int get hashCode => Object.hash(error, submitting);
 
   @override
   String toString() =>

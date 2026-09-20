@@ -74,6 +74,8 @@ void main() {
       expect(find.text('Camping tent'), findsOneWidget);
       expect(find.text('Stand-up paddle board'), findsOneWidget);
       expect(find.text('15.00 USD'), findsOneWidget);
+      // Let the listing images decode before the screenshot is taken.
+      await tester.pump(const Duration(seconds: 2));
       await binding.takeScreenshot('02-listings');
 
       // The real Keychain / Keystore now holds the session.

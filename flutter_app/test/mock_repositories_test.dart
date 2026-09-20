@@ -92,7 +92,7 @@ void main() {
       expect(items.map((l) => l.author?.displayName), everyElement('Pat P'));
       expect(
         items.map((l) => l.image?.url),
-        everyElement(startsWith('https://')),
+        everyElement(startsWith('asset:')),
       );
     });
 

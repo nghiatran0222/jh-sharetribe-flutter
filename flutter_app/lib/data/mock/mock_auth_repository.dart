@@ -2,6 +2,7 @@ import '../../core/app_error.dart';
 import '../../core/result.dart';
 import '../../domain/models/user.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../sharetribe/guard.dart';
 import '../sharetribe/token_store.dart';
 import 'mock_data.dart';
 
@@ -15,8 +16,9 @@ class MockAuthRepository implements AuthRepository {
   final TokenStore _store;
   final Duration latency;
 
-  /// Shared by every instance, so a sign-up survives a new repository.
-  static final List<MockAccount> _accounts = [...mockAccounts];
+  /// Sign-ups live as long as this repository does. Not static: a static
+  /// list leaks accounts between tests and makes them order-dependent.
+  final List<MockAccount> _accounts = [...mockAccounts];
 
   @override
   Future<Result<User>> login({
@@ -28,13 +30,15 @@ class MockAuthRepository implements AuthRepository {
     if (account == null || account.password != password) {
       return const Err(InvalidCredentials());
     }
-    await _store.save(
-      AuthTokens(
-        accessToken: '$_tokenPrefix${account.id}',
-        refreshToken: 'mock-refresh-${account.id}',
-      ),
-    );
-    return Ok(_user(account));
+    return guard(() async {
+      await _store.save(
+        AuthTokens(
+          accessToken: '$_tokenPrefix${account.id}',
+          refreshToken: 'mock-refresh-${account.id}',
+        ),
+      );
+      return _user(account);
+    });
   }
 
   @override
@@ -59,18 +63,15 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<User?>> restoreSession() async {
+  Future<Result<User?>> restoreSession() => guard(() async {
     final tokens = await _store.read();
     final id = tokens?.accessToken.replaceFirst(_tokenPrefix, '');
     final account = _accounts.where((a) => a.id == id).firstOrNull;
-    return Ok(account == null ? null : _user(account));
-  }
+    return account == null ? null : _user(account);
+  });
 
   @override
-  Future<Result<void>> logout() async {
-    await _store.clear();
-    return const Ok(null);
-  }
+  Future<Result<void>> logout() => guard(() => _store.clear());
 
   MockAccount? _find(String email) {
     final key = email.trim().toLowerCase();

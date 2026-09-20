@@ -4,9 +4,11 @@ Guidance for coding agents (Claude Code reads it via `CLAUDE.md` → `@AGENTS.md
 
 ## Project status
 
-A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified transaction process, plus a **Flutter** app that logs in to Sharetribe and lists listings. The full brief is in `README.md`.
+A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified transaction process, plus a **Flutter** app that logs in to Sharetribe and lists listings. The brief is in `docs/brief.md`; the submission README is the repo root `README.md`.
 
-**Status:** the Sharetribe process v1/v2 (P1) is approved and frozen in `sharetribe/`. No Flutter code exists yet. Planning docs:
+**Status (2026-09-20):** P1–P6 done. The process v1/v2 is approved and frozen in `sharetribe/`. The Flutter app is built and `make verify` is green (72 tests): foundations, JSON:API, dio client with refresh, mock and live repositories, login and listings on Cubits, plus an E2E suite on a simulator (ADR 0016). Remaining: **P7, the human live gate** (Console, `flex-cli`, one live login, and capturing a real `listings/query` fixture), and the optional P4b stretch (Transaction repository and Request button). P6's adversarial review is in `docs/review-p6.md`.
+
+Planning docs:
 - `docs/plan.md`: phased build plan (P0–P7), agent session prompts, human gates. Its "Lock so the agent cannot drift" section is binding.
 - `docs/q-and-a.md`: questions for the reviewer. Its "Working decisions" table marks each answer Assumed, Decided or Open. Recheck an Assumed or Open row before building anything that depends on it.
 - `docs/analysis-of-requirements.md`: scope and reasoning behind the plan.
@@ -18,7 +20,7 @@ A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified 
 Dart 3 / Flutter 3.47.4 stable (pinned in `.fvmrc`; FVM optional, no Melos: ADR 0013), flutter_bloc (Cubit), dio, flutter_secure_storage.
 Sharetribe Marketplace API (JSON:API) over REST. There is no official Flutter/Dart SDK.
 
-## Layout (planned)
+## Layout
 
 ```text
 sharetribe/
@@ -28,11 +30,15 @@ sharetribe/
 flutter_app/
   lib/
     core/                # Env, Result, AppError
-    data/                # json_api.dart, sharetribe/ (client, TokenStore, live repos), mock/
+    data/                # json_api.dart, sharetribe/ (client, TokenStore, guard, live repos), mock/
     domain/              # models + abstract repositories
     presentation/        # Cubits + login, listings pages
     app.dart             # RepositoryProvider / BlocProvider wiring
-  test/                  # json_api, refresh, repos, Cubits, app_mock_test.dart
+    app_dependencies.dart# composition root: mock or live from Env
+  assets/mock/           # bundled listing images, so mock mode needs no network
+  test/                  # json_api, refresh, repos, Cubits, pages, app_mock_test.dart
+  integration_test/      # E2E on a device: real SecureTokenStore (ADR 0016)
+  test_driver/           # writes docs/screenshots/ during `make e2e`
 ```
 
 ## Architecture
@@ -40,7 +46,7 @@ flutter_app/
 presentation (Cubits) → domain repositories → data (mock | live `SharetribeClient`) → flutter_secure_storage.
 Do not add a backend. Do not use the Integration API.
 
-- **Endpoints:** `POST https://flex-api.sharetribe.com/v1/auth/token` (`password` grant with `scope=user` for login, `refresh_token` grant for refresh) and `GET https://flex-api.sharetribe.com/v1/listings?include=author,images` plus an explicit image variant via `fields.image`.
+- **Endpoints** (host `https://flex-api.sharetribe.com`; Marketplace API paths carry the `/v1/api/` prefix, auth does not): `POST /v1/auth/token` (`password` grant with `scope=user` for login, `refresh_token` grant for refresh, `client_credentials` for an anonymous token), `POST /v1/auth/revoke` on logout, `GET /v1/api/current_user/show`, and `GET /v1/api/listings/query?include=author,images` plus an explicit image variant via `fields.image`. Verified against the Marketplace API reference in P6.
 - **Two trust levels:** the Marketplace API uses the public Client ID and a user token, and it is the only API the app may call. The Integration API uses the Client Secret, which never reaches the app or the repo.
 - **JSON:API:** `data` + `included` (author, images) are denormalized in `data/json_api.dart` and mapped by `Listing.fromJsonApi`. Widgets never parse raw maps.
 - **Auth loop:** log in → store access + refresh tokens with flutter_secure_storage → a dio `QueuedInterceptor` adds `Authorization: Bearer` → on a 401, refresh once and retry (one refresh even when several requests fail at once; persist the rotated refresh token) → logout clears the tokens → restore the session on launch.
@@ -50,10 +56,11 @@ Do not add a backend. Do not use the Integration API.
 
 ## Commands
 
-Run from `flutter_app/` once it exists (created in P2a):
+Run from `flutter_app/`:
 
 - verify (definition of done): `make verify` (runs `flutter analyze` then `flutter test`, including `test/app_mock_test.dart`, which starts the full app in mock mode). With FVM: `make verify FLUTTER="fvm flutter"`, and prefix the commands below with `fvm`.
 - test: `flutter test`; one file: `flutter test test/<file>_test.dart`; one case: add `--plain-name "<name>"`
+- e2e (needs a booted device, not part of verify): `make e2e DEVICE=<device-id>`. Runs `integration_test/` against the real `SecureTokenStore` and rewrites `docs/screenshots/` (ADR 0016).
 - lint: `flutter analyze`
 - run mock (offline): `flutter run --dart-define=SHARETRIBE_MODE=mock`
 - run live: `flutter run --dart-define=SHARETRIBE_MODE=live --dart-define=SHARETRIBE_CLIENT_ID=<id>`

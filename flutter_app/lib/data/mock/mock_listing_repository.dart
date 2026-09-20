@@ -3,6 +3,7 @@ import '../../core/result.dart';
 import '../../domain/models/listing.dart';
 import '../../domain/repositories/listing_repository.dart';
 import '../json_api.dart';
+import '../sharetribe/guard.dart';
 import '../sharetribe/token_store.dart';
 import 'mock_data.dart';
 
@@ -17,8 +18,12 @@ class MockListingRepository implements ListingRepository {
   @override
   Future<Result<List<Listing>>> fetchListings() async {
     await Future<void>.delayed(latency);
-    if (await _store.read() == null) return const Err(Unauthorized());
-    final document = JsonApiDocument.parse(mockListingsQuery);
-    return Ok([for (final r in document.data) Listing.fromJsonApi(r)]);
+    final session = await guard(_store.read);
+    if (session case Err(:final error)) return Err(error);
+    if (session.valueOrNull == null) return const Err(Unauthorized());
+    return guard(() async {
+      final document = JsonApiDocument.parse(mockListingsQuery);
+      return [for (final r in document.data) Listing.fromJsonApi(r)];
+    });
   }
 }
