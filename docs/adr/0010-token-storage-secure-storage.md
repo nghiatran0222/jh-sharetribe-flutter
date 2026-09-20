@@ -1,6 +1,6 @@
 # 0010. Token storage: flutter_secure_storage behind a TokenStore interface
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-20
 - Phase: P2a
 
@@ -25,3 +25,7 @@ Define an abstract `TokenStore` (`read` / `save` / `clear` of `AuthTokens`) in `
 - A refresh token rejected by the server (400/401) clears the store; the next session restore returns no user.
 - `AppDependencies.fromEnv` (P4) is the only place that builds a store. It uses `SecureTokenStore` in **both** modes, so mock mode restores a session across launches exactly as live mode does, and the difference between the modes stays limited to the repositories. `test/app_mock_test.dart` passes an `InMemoryTokenStore` through the `tokenStore` override, because widget tests have no platform channels.
 - Android `minSdk` and iOS Keychain requirements come with flutter_secure_storage 11; the README (P5) notes them if the build needs changes.
+
+## Status history
+
+- Proposed when written; **Accepted 2026-09-20**. The E2E suite (ADR 0016) exercises the real `SecureTokenStore` on a simulator, so the decision is verified, not just described.

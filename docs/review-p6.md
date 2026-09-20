@@ -36,9 +36,14 @@ The review's two MUST findings — the ones it said sank the submission — are 
 |--|--|--|
 | 16 | The Android target has never been built; every screenshot is the iPhone 15 simulator, while `docs/q-and-a.md` claims Android + iOS. Also ADR 0010's `minSdk` note was never written. | Needs one Android build, or the claim narrowed. |
 | 19 | No transaction code in the app (`transactions/initiate` with `processAlias: simple-request/release-2`). Defensible under ADR 0005, but it is the only thing that would connect the Flutter half to the Sharetribe half. | P4b stretch; decide whether to build it. |
-| 9 | ADRs 0009, 0010 and 0016 are still `Proposed` — and are exactly the three with compliance defects. | Needs a human decision to accept them. |
-| 18 | No pagination, on a catalog deliberately seeded past one page. `perPage` is hardcoded and `meta.totalPages` is never read. | Decide: implement paging, or say in the README why 50 is enough. |
 | 15 | Stock `flutter create` leftovers: `com.example` bundle id. | The app README and pubspec description are fixed; the bundle id rename is left alone deliberately, since it touches Android and iOS project files and nothing verifies them here. |
+
+## Closed by decision (2026-09-20)
+
+| # | Finding | Decision |
+|--|--|--|
+| 9 | ADRs 0009, 0010 and 0016 were still `Proposed`. | All three accepted, now that the code complies: the mock repositories are guarded, the real `SecureTokenStore` is exercised by the E2E suite, and the E2E suite has earned its keep. The index is in sync. |
+| 18 | No pagination. | Not implemented, and now stated in the README with the reason: one page of 50 covers a sandbox, and `test/live_fixture_test.dart` pins the `meta` shape (`totalItems`, `totalPages`, `page`, `perPage`) that a paging implementation would need. |
 
 ## Process criticism worth keeping
 

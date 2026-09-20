@@ -12,12 +12,12 @@ Index only. The ADRs themselves live in `docs/adr/`. Add one line here per ADR, 
 | [0006](../../docs/adr/0006-agents-md-single-source.md) | AGENTS.md single source; CLAUDE.md = `@AGENTS.md` | Accepted | P0 |
 | [0007](../../docs/adr/0007-v2-provider-accept.md) | v2 adds provider accept/decline + 3-day expiry | Accepted | P1 |
 | [0008](../../docs/adr/0008-hand-written-no-payment-baseline.md) | Hand-written minimal no-payment v1 baseline | Accepted | P1 |
-| [0009](../../docs/adr/0009-result-apperror-over-exceptions.md) | Repositories return `Result`/`AppError`; `guard()` maps throws | Proposed | P2a |
-| [0010](../../docs/adr/0010-token-storage-secure-storage.md) | `TokenStore` interface; flutter_secure_storage live, in-memory for tests | Proposed | P2a |
+| [0009](../../docs/adr/0009-result-apperror-over-exceptions.md) | Repositories return `Result`/`AppError`; `guard()` maps throws | Accepted | P2a |
+| [0010](../../docs/adr/0010-token-storage-secure-storage.md) | `TokenStore` interface; flutter_secure_storage live, in-memory for tests | Accepted | P2a |
 | [0011](../../docs/adr/0011-models-before-code.md) | Process and domain models come before code (MDD) | Accepted | P1–P2 |
 | [0012](../../docs/adr/0012-agent-harness-hooks-and-skills.md) | Guard hook + `new-adr` skill now; verify hooks at end of P2a | Accepted | P0, P2a |
 | [0013](../../docs/adr/0013-fvm-pin-no-melos.md) | Pin Flutter 3.47.4 with FVM (optional); no Melos | Accepted | P0, P2a, P5 |
 | [0014](../../docs/adr/0014-official-flutter-agent-skills-filtered.md) | `dart-flutter` plugin (skills + Dart MCP); 5 skills and banned packages blocked by the guard | Accepted | P0, P2a |
 | [0015](../../docs/adr/0015-no-openapi-codegen.md) | No OpenAPI (codegen or docs spec); tested fixtures are the API contract | Accepted | P0, P2a–P3, P7 |
-| [0016](../../docs/adr/0016-e2e-integration-test-and-screenshots.md) | E2E on a simulator in mock mode, outside `make verify`; screenshots from the same run | Proposed | P4 follow-up |
+| [0016](../../docs/adr/0016-e2e-integration-test-and-screenshots.md) | E2E on a simulator in mock mode, outside `make verify`; screenshots from the same run | Accepted | P4 follow-up |
 

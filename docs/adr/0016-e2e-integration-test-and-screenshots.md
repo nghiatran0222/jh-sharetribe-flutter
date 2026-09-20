@@ -1,6 +1,6 @@
 # 0016. E2E on a simulator in mock mode, and screenshots from the same run
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-20
 - Phase: P4 follow-up (after P5)
 
@@ -27,3 +27,7 @@ Add an `integration_test` suite (`integration_test/app_test.dart`) that runs the
 - Screenshots in `docs/screenshots/` are build output committed on purpose: they are the README's visual evidence, and regenerating them is one command.
 - On Android, `binding.convertFlutterSurfaceToImage()` is required before `takeScreenshot`; the current run targets an iOS simulator, where it is not.
 - `pumpAndSettle` cannot be used in this suite, because a `CircularProgressIndicator` never stops animating. The tests pump real frames until a finder matches, with a timeout.
+
+## Status history
+
+- Proposed when written; **Accepted 2026-09-20**. It has already paid for itself twice: it caught `Image.network` and then `Image.asset` rendering an empty box while decoding, which no headless test could see.

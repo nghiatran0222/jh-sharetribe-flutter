@@ -135,6 +135,8 @@ presentation (Cubits)  →  domain repositories  →  data: mock | live
                                               flutter_secure_storage
 ```
 
+**Pagination is deliberately not implemented.** The app requests a single page of 50 listings (`perPage: 50` in `live_listing_repository.dart`), which covers a sandbox marketplace; the brief asks to fetch and display listings, not to build an endless feed. Sharetribe returns a `meta` block with `totalItems`, `totalPages`, `page` and `perPage`, captured and asserted in `test/live_fixture_test.dart`, so the shape a paging implementation needs is already pinned by a test.
+
 Each repository has two implementations behind one interface, so the UI cannot tell mock from live. Widgets never see raw JSON: `data/json_api.dart` plus `Listing.fromJsonApi` is the only translation from Sharetribe's shapes into models. Repositories never throw; they return `Result<T>` carrying an `AppError` that the UI can show.
 
 | Where | What |

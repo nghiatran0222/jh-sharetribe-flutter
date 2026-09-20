@@ -1,6 +1,6 @@
 # 0009. Repositories return Result/AppError instead of throwing
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-20
 - Phase: P2a
 
@@ -24,3 +24,7 @@ Every repository method returns `Future<Result<T>>` (`core/result.dart`: sealed 
 - `SharetribeClient` and `JsonApiDocument` may still throw. Only repositories must not, and `guard()` is the boundary.
 - Tests check the error type with `isA<InvalidCredentials>()` and similar matchers, not exception matchers.
 - Mapping lives in `appErrorFromDio`. A 401 that survives the refresh becomes `Unauthorized`. The token endpoint's 400/401 on login becomes `InvalidCredentials`, and a 409 on sign-up becomes `EmailTaken`.
+
+## Status history
+
+- Proposed when written; **Accepted 2026-09-20**, after P6 closed the one gap: the mock repositories throw-guarded too.
