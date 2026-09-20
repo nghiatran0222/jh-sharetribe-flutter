@@ -14,5 +14,5 @@ DEVICE ?= ios
 
 .PHONY: e2e
 e2e:
-	$(FLUTTER) drive --driver=test_driver/integration_test.dart \
+	$(FLUTTER) drive --no-pub --driver=test_driver/integration_test.dart \
 		--target=integration_test/app_test.dart -d $(DEVICE)
