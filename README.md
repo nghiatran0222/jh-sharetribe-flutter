@@ -14,7 +14,7 @@ A Sharetribe Flex marketplace with a modified transaction process, plus a Flutte
 
 - Sharetribe process v1 and v2 as `process.edn` + email templates, published to the `nghiatran-test` marketplace with `release-1` on version 1 and `release-2` on version 2. Reproduce the steps against your own marketplace with step 1 below.
 - Flutter: login (password grant, `scope=user`), tokens in Keychain/Keystore, session restore on launch, automatic token refresh on a 401, listings with author, price and image, pull-to-refresh, empty and error states, logout.
-- 72 tests, no device and no network needed — plus one live run against the real Marketplace API (screenshot below).
+- 78 tests, no device and no network needed — including one real Sharetribe response parsed as a fixture, plus one live run against the Marketplace API (screenshot below).
 
 Not built, on purpose: no in-app request flow (the Request button is stretch, [ADR 0005](docs/adr/0005-request-flow-as-stretch.md)), no payments ([ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md)), no sign-up screen (the repository supports it; the brief asks only for authentication).
 
@@ -80,7 +80,7 @@ make verify                            # flutter analyze, then flutter test
 make verify FLUTTER="fvm flutter"      # with FVM
 ```
 
-This is the project's definition of done. It runs 72 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
+This is the project's definition of done. It runs 78 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
 
 The tests that matter most for a reviewer:
 
@@ -89,6 +89,7 @@ The tests that matter most for a reviewer:
 | `test/token_refresh_test.dart` | 401 → one refresh → retry; three parallel 401s still refresh **once**; the rotated refresh token is persisted; a dead refresh token clears the session |
 | `test/json_api_test.dart`, `test/listing_test.dart` | `data` + `included` denormalizing; missing image variant, price or author map to null, never an error |
 | `test/live_repositories_test.dart` | the exact requests sent to Sharetribe, and how failures map to errors |
+| `test/live_fixture_test.dart` | a **real** `listings/query` response from the marketplace, parsed by the same code the app uses (ADR 0015) |
 | `test/app_mock_test.dart` | cold start, login, wrong password, session restore, logout, pull-to-refresh |
 
 ### End-to-end on a simulator (optional)

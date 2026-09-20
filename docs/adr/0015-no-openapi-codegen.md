@@ -21,7 +21,7 @@ Do not use OpenAPI, for code generation or as a documentation spec. The API cont
 ## Consequences
 
 - `json_api.dart` and `Listing.fromJsonApi` stay the only mapping code (ADR 0011); their tests are the contract check.
-- P7 adds a real-response fixture test, so the mock and live shapes cannot silently diverge.
+- P7 added the real-response fixture test: `test/fixtures/listings_query_live.json` (captured 2026-09-20 from the `nghiatran-test` marketplace, ids, display name and signed image URLs replaced) parsed by `test/live_fixture_test.dart`. It passed without any parser change, so the hand-written fixtures matched Sharetribe's real shapes.
 - No OpenAPI tooling (`openapi-generator`, `swagger_parser`, `openapi_generator_annotations`, …) is added; P6 checks that no generated files appear in `flutter_app/`.
 - The P5 README "Key decisions" can state: "No OpenAPI: Sharetribe publishes none; JSON:API mapping is hand-written and tested."
 - Revisit only if Sharetribe publishes an official spec; that would be a new ADR.

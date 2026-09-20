@@ -27,13 +27,13 @@ The review's two MUST findings — the ones it said sank the submission — are 
 | # | Finding | Evidence |
 |--|--|--|
 | 1 | No Sharetribe environment was ever created. | Marketplace `nghiatran-test` created, the process published with `release-1` on version 1 and `release-2` on version 2, and a provider with published listings plus a customer user seeded in Console. |
+| 11 | ADR 0015 promised a real captured `listings/query` fixture. | `test/fixtures/listings_query_live.json` is a real response from the marketplace (ids, provider display name and signed image URLs replaced; field names, nesting and value types untouched), parsed by `test/live_fixture_test.dart`. All six assertions passed on the first run, so the parser needed no change. The `meta` block it captured (`totalItems: 10`, `totalPages: 2`) is also the evidence for finding 18, pagination. |
 | 2 | Nothing has ever talked to Sharetribe. | A live run logged in as the customer and fetched real listings, authors, prices and images over the Marketplace API: `docs/screenshots/04-live-listings.png`. It confirms against real data what only fixtures had covered: the auth and query paths, the JSON:API mapping, the `landscape-crop` image variant, the author relationship, and prices rendered from minor units (49.99 USD). |
 
 ## Open — needs the human gate (P7)
 
 | # | Finding | Why it is still open |
 |--|--|--|
-| 11 | ADR 0015 promised a real captured `listings/query` fixture; it does not exist. | Capture one from the live marketplace with personal data removed, and parse it in a test. |
 | 16 | The Android target has never been built; every screenshot is the iPhone 15 simulator, while `docs/q-and-a.md` claims Android + iOS. Also ADR 0010's `minSdk` note was never written. | Needs one Android build, or the claim narrowed. |
 | 19 | No transaction code in the app (`transactions/initiate` with `processAlias: simple-request/release-2`). Defensible under ADR 0005, but it is the only thing that would connect the Flutter half to the Sharetribe half. | P4b stretch; decide whether to build it. |
 | 9 | ADRs 0009, 0010 and 0016 are still `Proposed` — and are exactly the three with compliance defects. | Needs a human decision to accept them. |

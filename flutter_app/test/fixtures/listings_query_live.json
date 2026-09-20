@@ -1,0 +1,347 @@
+{
+  "data": [
+    {
+      "id": "5a8f4c3e-0000-0000-0000-00000000000b",
+      "type": "listing",
+      "attributes": {
+        "description": "Eco-friendly bamboo cutting board for food prep.",
+        "deleted": false,
+        "geolocation": {
+          "lat": 39.25336,
+          "lng": -106.24101
+        },
+        "createdAt": "2026-09-19T08:31:20.486Z",
+        "state": "published",
+        "title": "Bamboo Cutting Board",
+        "availabilityPlan": {
+          "type": "availability-plan/time",
+          "timezone": "Etc/UTC"
+        },
+        "publicData": {
+          "listingType": "free-listing",
+          "location": {
+            "address": "Red Cloud, Leadville, Colorado 80461, United States",
+            "building": ""
+          },
+          "transactionProcessAlias": "default-inquiry/release-1",
+          "unitType": "inquiry"
+        },
+        "price": {
+          "amount": 4999,
+          "currency": "USD"
+        },
+        "metadata": {}
+      },
+      "relationships": {
+        "author": {
+          "data": {
+            "id": "5a8f4c3e-0000-0000-0000-000000000002",
+            "type": "user"
+          }
+        },
+        "images": {
+          "data": [
+            {
+              "id": "5a8f4c3e-0000-0000-0000-00000000000c",
+              "type": "image"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000009",
+      "type": "listing",
+      "attributes": {
+        "description": "Fresh and juicy cherry tomatoes for salads and snacking.",
+        "deleted": false,
+        "geolocation": {
+          "lat": 29.901274,
+          "lng": -90.00935
+        },
+        "createdAt": "2026-09-19T08:27:05.649Z",
+        "state": "published",
+        "title": "Sweet Cherry Tomatoes",
+        "availabilityPlan": {
+          "type": "availability-plan/time",
+          "timezone": "Etc/UTC"
+        },
+        "publicData": {
+          "listingType": "free-listing",
+          "location": {
+            "address": "Place De Concorde, New Orleans, Louisiana, United States",
+            "building": ""
+          },
+          "transactionProcessAlias": "default-inquiry/release-1",
+          "unitType": "inquiry"
+        },
+        "price": {
+          "amount": 1899,
+          "currency": "USD"
+        },
+        "metadata": {}
+      },
+      "relationships": {
+        "author": {
+          "data": {
+            "id": "5a8f4c3e-0000-0000-0000-000000000002",
+            "type": "user"
+          }
+        },
+        "images": {
+          "data": [
+            {
+              "id": "5a8f4c3e-0000-0000-0000-00000000000a",
+              "type": "image"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000007",
+      "type": "listing",
+      "attributes": {
+        "description": "Space-saving rack to store and organize spices conveniently.",
+        "deleted": false,
+        "geolocation": {
+          "lat": 35.876186,
+          "lng": -78.52118
+        },
+        "createdAt": "2026-09-19T08:25:26.060Z",
+        "state": "published",
+        "title": "Wall-Mounted Spice Rack",
+        "availabilityPlan": {
+          "type": "availability-plan/time",
+          "timezone": "Etc/UTC"
+        },
+        "publicData": {
+          "listingType": "free-listing",
+          "location": {
+            "address": "6793 Speight Circle, Raleigh, North Carolina 27616, United States",
+            "building": ""
+          },
+          "transactionProcessAlias": "default-inquiry/release-1",
+          "unitType": "inquiry"
+        },
+        "price": {
+          "amount": 899,
+          "currency": "USD"
+        },
+        "metadata": {}
+      },
+      "relationships": {
+        "author": {
+          "data": {
+            "id": "5a8f4c3e-0000-0000-0000-000000000002",
+            "type": "user"
+          }
+        },
+        "images": {
+          "data": [
+            {
+              "id": "5a8f4c3e-0000-0000-0000-000000000008",
+              "type": "image"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000005",
+      "type": "listing",
+      "attributes": {
+        "description": "Durable and shatterproof silicone glasses for outdoor use.",
+        "deleted": false,
+        "geolocation": {
+          "lat": 43.81826,
+          "lng": -71.03832
+        },
+        "createdAt": "2026-09-19T08:23:36.519Z",
+        "state": "published",
+        "title": "Silicone Wine Glasses",
+        "availabilityPlan": {
+          "type": "availability-plan/time",
+          "timezone": "Etc/UTC"
+        },
+        "publicData": {
+          "listingType": "free-listing",
+          "location": {
+            "address": "99 Moulton Road, Freedom, New Hampshire 03836, United States",
+            "building": ""
+          },
+          "transactionProcessAlias": "default-inquiry/release-1",
+          "unitType": "inquiry"
+        },
+        "price": {
+          "amount": 1299,
+          "currency": "USD"
+        },
+        "metadata": {}
+      },
+      "relationships": {
+        "author": {
+          "data": {
+            "id": "5a8f4c3e-0000-0000-0000-000000000002",
+            "type": "user"
+          }
+        },
+        "images": {
+          "data": [
+            {
+              "id": "5a8f4c3e-0000-0000-0000-000000000006",
+              "type": "image"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000003",
+      "type": "listing",
+      "attributes": {
+        "description": "Complete grooming kit for dogs and cats.",
+        "deleted": false,
+        "geolocation": {
+          "lat": 28.077885,
+          "lng": -82.46534
+        },
+        "createdAt": "2026-09-19T08:21:56.208Z",
+        "state": "published",
+        "title": "Pet Grooming Kit",
+        "availabilityPlan": {
+          "type": "availability-plan/time",
+          "timezone": "Etc/UTC"
+        },
+        "publicData": {
+          "listingType": "free-listing",
+          "location": {
+            "address": "739 Gateway Lane, Tampa, Florida 33613, United States",
+            "building": ""
+          },
+          "transactionProcessAlias": "default-inquiry/release-1",
+          "unitType": "inquiry"
+        },
+        "price": {
+          "amount": 599,
+          "currency": "USD"
+        },
+        "metadata": {}
+      },
+      "relationships": {
+        "author": {
+          "data": {
+            "id": "5a8f4c3e-0000-0000-0000-000000000002",
+            "type": "user"
+          }
+        },
+        "images": {
+          "data": [
+            {
+              "id": "5a8f4c3e-0000-0000-0000-000000000004",
+              "type": "image"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000002",
+      "type": "user",
+      "attributes": {
+        "banned": false,
+        "deleted": false,
+        "createdAt": "2026-09-19T08:12:41.038Z",
+        "state": "active",
+        "profile": {
+          "displayName": "Sandbox P",
+          "abbreviatedName": "SP",
+          "bio": null,
+          "publicData": {
+            "userType": "provider"
+          },
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-00000000000c",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "landscape-crop": {
+            "height": 267,
+            "width": 400,
+            "url": "https://sharetribe.imgix.net/5a8f4c3e-redacted/landscape-crop.jpg?auto=format&fit=clip&w=400&h=267",
+            "name": "landscape-crop"
+          }
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-00000000000a",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "landscape-crop": {
+            "height": 267,
+            "width": 400,
+            "url": "https://sharetribe.imgix.net/5a8f4c3e-redacted/landscape-crop.jpg?auto=format&fit=clip&w=400&h=267",
+            "name": "landscape-crop"
+          }
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000008",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "landscape-crop": {
+            "height": 267,
+            "width": 400,
+            "url": "https://sharetribe.imgix.net/5a8f4c3e-redacted/landscape-crop.jpg?auto=format&fit=clip&w=400&h=267",
+            "name": "landscape-crop"
+          }
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000006",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "landscape-crop": {
+            "height": 267,
+            "width": 400,
+            "url": "https://sharetribe.imgix.net/5a8f4c3e-redacted/landscape-crop.jpg?auto=format&fit=clip&w=400&h=267",
+            "name": "landscape-crop"
+          }
+        }
+      }
+    },
+    {
+      "id": "5a8f4c3e-0000-0000-0000-000000000004",
+      "type": "image",
+      "attributes": {
+        "variants": {
+          "landscape-crop": {
+            "height": 267,
+            "width": 400,
+            "url": "https://sharetribe.imgix.net/5a8f4c3e-redacted/landscape-crop.jpg?auto=format&fit=clip&w=400&h=267",
+            "name": "landscape-crop"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "totalItems": 10,
+    "totalPages": 2,
+    "page": 1,
+    "paginationLimit": 2,
+    "perPage": 5
+  }
+}
