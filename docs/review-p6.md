@@ -20,13 +20,20 @@ A fresh read-only agent reviewed the repo at `2c76926` against `docs/brief.md` a
 | 20 | `MockAuthRepository._accounts` was process-global mutable state, leaking sign-ups between tests. | Now an instance field. |
 | 21 | `_sameIds` compared full listings, not ids. | Renamed `_sameListings`. |
 
+## Closed by P7 (2026-09-20)
+
+The review's two MUST findings — the ones it said sank the submission — are closed.
+
+| # | Finding | Evidence |
+|--|--|--|
+| 1 | No Sharetribe environment was ever created. | Marketplace `nghiatran-test` created, the process published with `release-1` on version 1 and `release-2` on version 2, and a provider with published listings plus a customer user seeded in Console. |
+| 2 | Nothing has ever talked to Sharetribe. | A live run logged in as the customer and fetched real listings, authors, prices and images over the Marketplace API: `docs/screenshots/04-live-listings.png`. It confirms against real data what only fixtures had covered: the auth and query paths, the JSON:API mapping, the `landscape-crop` image variant, the author relationship, and prices rendered from minor units (49.99 USD). |
+
 ## Open — needs the human gate (P7)
 
 | # | Finding | Why it is still open |
 |--|--|--|
-| 1 | **No Sharetribe environment was ever created.** Three of the brief's six bullets are Sharetribe bullets, and the repo answers them with commands for the reviewer to run. The review calls this a fail, not a gap. | Console and `flex-cli` are human-only by AGENTS.md rule. Needs: create the trial marketplace, run the validate/create/push/create-alias sequence, publish a listing, create a customer, and paste the `flex-cli process list` output into the README as evidence. |
-| 2 | **Nothing has ever talked to Sharetribe.** Login, refresh and `listings/query` are exercised only against self-authored fixtures. | Needs one live run and a screenshot of the real listings screen. |
-| 11 | ADR 0015 promised a real captured `listings/query` fixture; it does not exist. | Capture one in P7 with personal data removed, and parse it in a test. |
+| 11 | ADR 0015 promised a real captured `listings/query` fixture; it does not exist. | Capture one from the live marketplace with personal data removed, and parse it in a test. |
 | 16 | The Android target has never been built; every screenshot is the iPhone 15 simulator, while `docs/q-and-a.md` claims Android + iOS. Also ADR 0010's `minSdk` note was never written. | Needs one Android build, or the claim narrowed. |
 | 19 | No transaction code in the app (`transactions/initiate` with `processAlias: simple-request/release-2`). Defensible under ADR 0005, but it is the only thing that would connect the Flutter half to the Sharetribe half. | P4b stretch; decide whether to build it. |
 | 9 | ADRs 0009, 0010 and 0016 are still `Proposed` — and are exactly the three with compliance defects. | Needs a human decision to accept them. |

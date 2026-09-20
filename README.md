@@ -12,9 +12,9 @@ A Sharetribe Flex marketplace with a modified transaction process, plus a Flutte
 
 ## What is built
 
-- Sharetribe process v1 and v2 as `process.edn` + email templates, ready to push. Publishing them needs Console access, so it is a human step (step 1).
+- Sharetribe process v1 and v2 as `process.edn` + email templates, published to the `nghiatran-test` marketplace with `release-1` on version 1 and `release-2` on version 2. Reproduce the steps against your own marketplace with step 1 below.
 - Flutter: login (password grant, `scope=user`), tokens in Keychain/Keystore, session restore on launch, automatic token refresh on a 401, listings with author, price and image, pull-to-refresh, empty and error states, logout.
-- 72 tests, no device and no network needed.
+- 72 tests, no device and no network needed — plus one live run against the real Marketplace API (screenshot below).
 
 Not built, on purpose: no in-app request flow (the Request button is stretch, [ADR 0005](docs/adr/0005-request-flow-as-stretch.md)), no payments ([ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md)), no sign-up screen (the repository supports it; the brief asks only for authentication).
 
@@ -104,11 +104,17 @@ It logs in, checks the listings, relaunches the app to prove the session is rest
 
 ### Screens
 
+Live mode, against a real Sharetribe marketplace (`nghiatran-test`): the app logged in as the customer and fetched these listings, authors, prices and images through the Marketplace API.
+
+![Live listings from Sharetribe](docs/screenshots/04-live-listings.png)
+
+Mock mode, from the end-to-end run above:
+
 | Login | Listings | Wrong password |
 |--|--|--|
 | ![Login screen](docs/screenshots/01-login.png) | ![Listings screen](docs/screenshots/02-listings.png) | ![Login error](docs/screenshots/03-login-error.png) |
 
-Mock mode, iPhone 15 simulator.
+Both on an iPhone 15 simulator.
 
 The process files have an offline structure check too, from the repo root:
 
