@@ -23,6 +23,12 @@ class ListingTile extends StatelessWidget {
                 child: Image.network(
                   image.url,
                   fit: BoxFit.cover,
+                  // Until the first frame arrives, show the placeholder
+                  // rather than an empty box.
+                  frameBuilder: (_, child, frame, wasSynchronouslyLoaded) =>
+                      frame == null && !wasSynchronouslyLoaded
+                      ? const _NoImage()
+                      : child,
                   // Offline, in tests, or a dead URL: show the placeholder.
                   errorBuilder: (_, _, _) => const _NoImage(),
                 ),

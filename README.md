@@ -91,6 +91,25 @@ The tests that matter most for a reviewer:
 | `test/live_repositories_test.dart` | the exact requests sent to Sharetribe, and how failures map to errors |
 | `test/app_mock_test.dart` | cold start, login, wrong password, session restore, logout, pull-to-refresh |
 
+### End-to-end on a simulator (optional)
+
+`make verify` runs without a device, so it injects an in-memory token store. One suite goes further and runs the real app on a simulator with real Keychain/Keystore storage ([ADR 0016](docs/adr/0016-e2e-integration-test-and-screenshots.md)):
+
+```bash
+cd flutter_app
+make e2e DEVICE=<device-id>     # `flutter devices` lists the ids
+```
+
+It logs in, checks the listings, relaunches the app to prove the session is restored from device storage, and logs out again. It also regenerates the screenshots below, so a stale screenshot means a failing test.
+
+### Screens
+
+| Login | Listings | Wrong password |
+|--|--|--|
+| ![Login screen](docs/screenshots/01-login.png) | ![Listings screen](docs/screenshots/02-listings.png) | ![Login error](docs/screenshots/03-login-error.png) |
+
+Mock mode, iPhone 15 simulator.
+
 The process files have an offline structure check too, from the repo root:
 
 ```bash
