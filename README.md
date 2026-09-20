@@ -28,10 +28,11 @@ Not built, on purpose: no in-app request flow (the Request button is stretch, [A
 
 Full commands: [`sharetribe/README.md`](sharetribe/README.md). In short:
 
-1. Create a marketplace (a free trial is enough) and note its **Marketplace ID** and, from Console → Applications, its **Client ID**.
-2. `flex-cli login`, then publish v1 as version 1 and point `release-1` at it.
-3. Push v2 as version 2 and create a **new** alias `release-2`. `release-1` never moves, so transactions already running on v1 keep their old rules.
-4. In Console, create a **provider** user with at least one **published** listing, and a **customer** user for the app to log in as.
+1. Create a marketplace (a free trial is enough) and note its **Marketplace ID**.
+2. Create the app's credentials: in Console go to **Build → Applications** ([console.sharetribe.com/advanced/applications](https://console.sharetribe.com/advanced/applications)) → **Add new**, choose **Marketplace API**, and copy the **Client ID**. The Client ID stays visible in Console. The application also shows a **client secret** once, and only once — this app never uses it, so leave it where it is. If your marketplace has separate test and live environments, take the Client ID from the one holding your listings.
+3. Log in with the CLI, then publish v1 as version 1 and point `release-1` at it.
+4. Push v2 as version 2 and create a **new** alias `release-2`. `release-1` never moves, so transactions already running on v1 keep their old rules.
+5. In Console, create a **provider** user with at least one **published** listing, and a **customer** user for the app to log in as.
 
 If the app later shows an empty list, this last step is the usual reason.
 

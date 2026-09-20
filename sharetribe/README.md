@@ -19,6 +19,8 @@ This checks structure only (states reachable, actors, notifications, template fi
 
 Prerequisites: a Sharetribe marketplace (dev environment), Node.js, and the CLI: `npm install -g flex-cli`. Run these from the repo root.
 
+Two different identifiers are involved. The **Marketplace ID** below is what the CLI needs. The Flutter app instead needs a **Client ID**, from Console → **Build → Applications** ([console.sharetribe.com/advanced/applications](https://console.sharetribe.com/advanced/applications)) → **Add new** → **Marketplace API**. The Client ID is public and stays visible in Console; the client secret it shows once is never used by the app and must not be committed.
+
 ```bash
 export MID=<your-marketplace-id>
 flex-cli login
