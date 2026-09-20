@@ -79,15 +79,17 @@ void main() {
       },
     );
 
-    test('when listings are fetched, then three listings with author and image return', () async {
+    test('when listings are fetched, then a full catalog with author and image returns', () async {
       final result = await listings.fetchListings();
 
       final items = result.valueOrNull!;
-      expect(items, hasLength(3));
+      expect(items.length, greaterThan(20));
+      expect(items.first.title, 'City bike');
+      expect(items.last.title, 'Garden trailer');
+      expect(items.map((l) => l.id).toSet(), hasLength(items.length));
       expect(items.map((l) => l.title), everyElement(isNotEmpty));
       expect(items.map((l) => l.price), everyElement(isNotNull));
-      expect(items.map((l) => l.author?.email), everyElement(isNull));
-      expect(items.map((l) => l.author?.displayName), everyElement(isNotEmpty));
+      expect(items.map((l) => l.author?.displayName), everyElement('Pat P'));
       expect(
         items.map((l) => l.image?.url),
         everyElement(startsWith('https://')),

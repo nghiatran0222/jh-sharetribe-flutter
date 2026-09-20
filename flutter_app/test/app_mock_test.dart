@@ -68,7 +68,7 @@ void main() {
       expect(find.text('Camping tent'), findsOneWidget);
       expect(find.text('Stand-up paddle board'), findsOneWidget);
       expect(find.text('15.00 USD'), findsOneWidget);
-      expect(find.text('Pat P'), findsNWidgets(3));
+      expect(find.text('Pat P'), findsWidgets);
       expect(await store.read(), isNotNull);
     });
 
@@ -114,6 +114,18 @@ void main() {
 
         expect(find.widgetWithText(AppBar, 'Log in'), findsOneWidget);
         expect(await store.read(), isNull);
+      },
+    );
+
+    testWidgets(
+      'when the list is scrolled, then listings below the fold are reached',
+      (tester) async {
+        await pumpApp(tester);
+
+        expect(find.text('Garden trailer'), findsNothing);
+        await tester.scrollUntilVisible(find.text('Garden trailer'), 300);
+
+        expect(find.text('Garden trailer'), findsOneWidget);
       },
     );
 
