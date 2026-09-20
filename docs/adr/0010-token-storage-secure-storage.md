@@ -23,5 +23,5 @@ Define an abstract `TokenStore` (`read` / `save` / `clear` of `AuthTokens`) in `
 - `AuthInterceptor`, `LiveAuthRepository` and the mock repositories depend on the `TokenStore` interface only.
 - Logout clears the store before the best-effort revoke call, so logout works offline.
 - A refresh token rejected by the server (400/401) clears the store; the next session restore returns no user.
-- `App` wiring (P4) chooses the store: `SecureTokenStore` in live mode. Mock-mode wiring is decided in P4. `test/app_mock_test.dart` must use `InMemoryTokenStore`.
+- `AppDependencies.fromEnv` (P4) is the only place that builds a store. It uses `SecureTokenStore` in **both** modes, so mock mode restores a session across launches exactly as live mode does, and the difference between the modes stays limited to the repositories. `test/app_mock_test.dart` passes an `InMemoryTokenStore` through the `tokenStore` override, because widget tests have no platform channels.
 - Android `minSdk` and iOS Keychain requirements come with flutter_secure_storage 11; the README (P5) notes them if the build needs changes.
