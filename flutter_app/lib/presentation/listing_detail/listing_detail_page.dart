@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/models/listing.dart';
 import '../listings/listing_tile.dart';
+import '../login/auth_cubit.dart';
 import 'request_cubit.dart';
 
 /// One listing, with a note and a Request button that starts a transaction
@@ -29,6 +30,11 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   Widget build(BuildContext context) {
     final listing = widget.listing;
     final price = listing.price;
+    // `transition/request` is a customer transition: Sharetribe refuses a
+    // request on your own listing (transaction-same-author-and-customer).
+    final auth = context.watch<AuthCubit>().state;
+    final ownListing =
+        auth is AuthAuthenticated && auth.user.id == listing.author?.id;
     return Scaffold(
       appBar: AppBar(title: Text(listing.title)),
       body: BlocBuilder<RequestCubit, RequestState>(
@@ -52,7 +58,19 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
               Text(listing.description),
             ],
             const SizedBox(height: 24),
-            if (state is RequestSent)
+            if (ownListing)
+              const Card(
+                key: Key('own_listing'),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'This is your listing. Only a customer can request it; '
+                    'as the provider you accept or decline requests in '
+                    'Console.',
+                  ),
+                ),
+              )
+            else if (state is RequestSent)
               _Sent(key: const Key('request_sent'), state: state)
             else ...[
               TextField(

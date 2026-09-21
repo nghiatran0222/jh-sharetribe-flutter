@@ -8,8 +8,11 @@ import 'package:sharetribe_flutter/domain/models/money.dart';
 import 'package:sharetribe_flutter/domain/models/user.dart';
 import 'package:sharetribe_flutter/presentation/listing_detail/listing_detail_page.dart';
 import 'package:sharetribe_flutter/presentation/listing_detail/request_cubit.dart';
+import 'package:sharetribe_flutter/presentation/login/auth_cubit.dart';
 
 import 'support/fake_repositories.dart';
+
+const customer = User(id: 'u1', displayName: 'Casey C');
 
 void main() {
   late FakeTransactionRepository transactions;
@@ -22,15 +25,24 @@ void main() {
     author: User(id: 'u2', displayName: 'Pat P'),
   );
 
-  Future<void> pumpPage(WidgetTester tester) async {
+  /// [viewer] is the logged-in user; the provider sees no Request button.
+  Future<void> pumpPage(WidgetTester tester, {User viewer = customer}) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: BlocProvider(
-          create: (_) => RequestCubit(transactions),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) =>
+                  AuthCubit(FakeAuthRepository(restoreResult: Ok(viewer)))
+                    ..restoreSession(),
+            ),
+            BlocProvider(create: (_) => RequestCubit(transactions)),
+          ],
           child: const ListingDetailPage(listing),
         ),
       ),
     );
+    await tester.pump();
     await tester.pump();
   }
 
@@ -105,6 +117,21 @@ void main() {
         expect(transactions.calls, hasLength(2));
       },
     );
+  });
+
+  group('given the provider viewing their own listing', () {
+    testWidgets('when the page opens, then there is no Request button', (
+      tester,
+    ) async {
+      await pumpPage(
+        tester,
+        viewer: const User(id: 'u2', displayName: 'Pat P'),
+      );
+
+      expect(find.byKey(const Key('own_listing')), findsOneWidget);
+      expect(find.byKey(const Key('request_button')), findsNothing);
+      expect(find.byKey(const Key('request_note')), findsNothing);
+    });
   });
 
   group('given a request already sent', () {

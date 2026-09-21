@@ -88,18 +88,70 @@ void main() {
   });
 
   group('given the marketplace rejects the transition', () {
-    setUp(() => handler = (_) => const FakeResponse(409, {'errors': []}));
+    /// Sharetribe answers 409 with a code naming the rule that was broken.
+    Future<AppError?> rejectedWith(String code) async {
+      handler = (_) => FakeResponse(409, {
+        'errors': [
+          {'code': code, 'status': 409, 'title': code},
+        ],
+      });
+      final result = await LiveTransactionRepository(client())
+          .requestListing(listingId: 'listing-1');
+      return result.errorOrNull;
+    }
 
     test(
-      'when they request a listing, then it returns a ServerError',
+      'when the alias cannot be resolved, then the message names it',
       () async {
+        final error = await rejectedWith('transaction-unknown-alias');
+
+        expect(
+          error,
+          isA<ServerError>().having(
+            (e) => e.code,
+            'code',
+            'transaction-unknown-alias',
+          ),
+        );
+        expect(error!.message, contains('simple-request/release-2'));
+      },
+    );
+
+    test(
+      'when the listing uses another process, then the message says so',
+      () async {
+        final error = await rejectedWith('transaction-invalid-transition');
+
+        expect(error!.message, contains('different transaction process'));
+      },
+    );
+
+    test(
+      'when the customer owns the listing, then the message says so',
+      () async {
+        final error = await rejectedWith(
+          'transaction-same-author-and-customer',
+        );
+
+        expect(error!.message, contains('cannot request your own listing'));
+      },
+    );
+
+    test(
+      'when the body carries no code, then the status is still reported',
+      () async {
+        handler = (_) => const FakeResponse(409, {'errors': []});
+
         final result = await LiveTransactionRepository(client())
             .requestListing(listingId: 'listing-1');
 
         expect(
           result.errorOrNull,
-          isA<ServerError>().having((e) => e.statusCode, 'status', 409),
+          isA<ServerError>()
+              .having((e) => e.statusCode, 'status', 409)
+              .having((e) => e.code, 'code', ''),
         );
+        expect(result.errorOrNull!.message, contains('409'));
       },
     );
   });

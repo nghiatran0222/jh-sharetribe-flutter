@@ -49,7 +49,7 @@ The review's two MUST findings — the ones it said sank the submission — are 
 
 | # | Finding | Fix |
 |--|--|--|
-| 19 | No transaction code in the app, so no transition or alias name appeared in Dart and the glossary's Transactions context was unrepresented. | Built: `TransactionRepository` with mock and live implementations, a `RequestCubit`, and a listing detail page with a note field and a Request button. `transition/request` and `simple-request/release-2` are now constants in `domain/models/transaction.dart`, used verbatim from `process.edn` (ADR 0011). `test/transaction_repository_test.dart` asserts the exact `transactions/initiate` body; the full-app mock test taps a listing and requests it. 93 tests. |
+| 19 | No transaction code in the app, so no transition or alias name appeared in Dart and the glossary's Transactions context was unrepresented. | Built, and confirmed live: a request sent from the app appears in Console with last transition `Request` on the custom process (`docs/screenshots/transaction_item_state_request.png`). Details: `TransactionRepository` with mock and live implementations, a `RequestCubit`, and a listing detail page with a note field and a Request button. `transition/request` and `simple-request/release-2` are now constants in `domain/models/transaction.dart`, used verbatim from `process.edn` (ADR 0011). `test/transaction_repository_test.dart` asserts the exact `transactions/initiate` body; the full-app mock test taps a listing and requests it. 93 tests. |
 
 ## Process criticism worth keeping
 

@@ -33,7 +33,8 @@ AppError appErrorFromDio(DioException e) {
       return const NetworkError();
     case DioExceptionType.badResponse:
       final status = e.response?.statusCode;
-      return status == 401 ? const Unauthorized() : ServerError(status);
+      if (status == 401) return const Unauthorized();
+      return ServerError(status, code: sharetribeErrorCode(e.response?.data));
     case DioExceptionType.cancel:
     case DioExceptionType.badCertificate:
     case DioExceptionType.unknown:
@@ -41,4 +42,14 @@ AppError appErrorFromDio(DioException e) {
           ? const NetworkError()
           : UnexpectedError('${e.error ?? e.message}');
   }
+}
+
+/// Sharetribe error bodies look like `{"errors": [{"code": "...", ...}]}`.
+/// Returns the first code, or an empty string when the body has none.
+String sharetribeErrorCode(Object? body) {
+  if (body is! Map) return '';
+  final errors = body['errors'];
+  if (errors is! List || errors.isEmpty) return '';
+  final first = errors.first;
+  return first is Map && first['code'] is String ? first['code'] as String : '';
 }

@@ -14,7 +14,7 @@ A Sharetribe Flex marketplace with a modified transaction process, plus a Flutte
 
 - Sharetribe process v1 and v2 as `process.edn` + email templates, published to the `nghiatran-test` marketplace with `release-1` on version 1 and `release-2` on version 2. Reproduce the steps against your own marketplace with step 1 below.
 - Flutter: login (password grant, `scope=user`), tokens in Keychain/Keystore, session restore on launch, automatic token refresh on a 401, listings with author, price and image, pull-to-refresh, empty and error states, logout, and a listing detail page whose **Request** button starts a transaction with `transition/request` on `simple-request/release-2`.
-- 93 tests, no device and no network needed — including one real Sharetribe response parsed as a fixture, plus one live run against the Marketplace API (screenshot below).
+- 97 tests, no device and no network needed — including one real Sharetribe response parsed as a fixture, plus one live run against the Marketplace API (screenshot below).
 
 Not built, on purpose: no payments ([ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md)), no inbox or provider-side accept/decline screens (the process supports them; the app is a customer client), and no sign-up screen (the repository supports it; the brief asks only for authentication). The request flow was stretch work ([ADR 0005](docs/adr/0005-request-flow-as-stretch.md)) and is now built.
 
@@ -80,7 +80,7 @@ make verify                            # flutter analyze, then flutter test
 make verify FLUTTER="fvm flutter"      # with FVM
 ```
 
-This is the project's definition of done. It runs 93 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
+This is the project's definition of done. It runs 97 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
 
 The tests that matter most for a reviewer:
 
@@ -109,6 +109,14 @@ It logs in, checks the listings, relaunches the app to prove the session is rest
 Live mode, against a real Sharetribe marketplace (`nghiatran-test`): the app logged in as the customer and fetched these listings, authors, prices and images through the Marketplace API.
 
 ![Live listings from Sharetribe](docs/screenshots/04-live-listings.png)
+
+The Request button works against that marketplace too. The customer sends it from the app, and the transaction appears in Console on **our** process — the top row's last transition is `Request`, while the two rows below it came from the web template on Sharetribe's stock `default-inquiry` process:
+
+| Request sent from the app (live) | The transaction in Console |
+|--|--|
+| ![Request sent live](docs/screenshots/customer_sent_request_in_flutter_app.png) | ![Console transaction with last transition Request](docs/screenshots/transaction_item_state_request.png) |
+
+A provider opening their own listing sees no Request button: `transition/request` is a customer transition, and Sharetribe refuses it with `transaction-same-author-and-customer`. Provider accept/decline is not in the app — the provider answers in Console. More step-by-step captures of the live run are in [`docs/screenshots/`](docs/screenshots/).
 
 Mock mode, from the end-to-end run above:
 
