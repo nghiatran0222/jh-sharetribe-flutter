@@ -108,6 +108,30 @@ void main() {
       await screenshot('03-login-error');
       expect(await SecureTokenStore().read(), isNull);
     });
+
+    testWidgets('when a listing is requested, then it waits for the provider', (
+      tester,
+    ) async {
+      await launchApp(tester);
+      await waitFor(tester, find.widgetWithText(AppBar, 'Log in'));
+      await logIn(tester, password: 'password123');
+      await waitFor(tester, find.text('City bike'));
+
+      await tester.tap(find.text('City bike'));
+      await waitFor(tester, find.byKey(const Key('request_button')));
+      await tester.enterText(
+        find.byKey(const Key('request_note')),
+        'Free next weekend?',
+      );
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.tap(find.byKey(const Key('request_button')));
+      await waitFor(tester, find.byKey(const Key('request_sent')));
+
+      expect(find.textContaining('expire after 3 days'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      await screenshot('05-request-sent');
+    });
   });
 
   group('given a session stored on the device', () {

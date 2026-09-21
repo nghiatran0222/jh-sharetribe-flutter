@@ -16,8 +16,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: dependencies.listingRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: dependencies.listingRepository),
+        RepositoryProvider.value(value: dependencies.transactionRepository),
+      ],
       child: BlocProvider(
         create: (_) => AuthCubit(dependencies.authRepository)..restoreSession(),
         child: MaterialApp(

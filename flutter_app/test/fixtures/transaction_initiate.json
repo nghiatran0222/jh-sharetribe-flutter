@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "5a8f4c3e-0000-4000-8000-0000000000t1",
+    "type": "transaction",
+    "attributes": {
+      "processName": "simple-request",
+      "processVersion": 2,
+      "lastTransition": "transition/request",
+      "lastTransitionedAt": "2026-09-21T09:12:00.000Z",
+      "protectedData": { "customerNote": "Is it available next weekend?" },
+      "transitions": [
+        {
+          "transition": "transition/request",
+          "createdAt": "2026-09-21T09:12:00.000Z",
+          "by": "customer"
+        }
+      ]
+    }
+  }
+}

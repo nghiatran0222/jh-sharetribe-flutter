@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/models/listing.dart';
+import '../../domain/repositories/transaction_repository.dart';
+import '../listing_detail/listing_detail_page.dart';
+import '../listing_detail/request_cubit.dart';
 import '../login/auth_cubit.dart';
 import 'listing_tile.dart';
 import 'listings_cubit.dart';
@@ -45,13 +49,29 @@ class ListingsPage extends StatelessWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: listings.length,
               separatorBuilder: (_, _) => const Divider(height: 1),
-              itemBuilder: (_, i) => ListingTile(listings[i]),
+              itemBuilder: (_, i) => ListingTile(
+                listings[i],
+                onTap: () => _openDetail(context, listings[i]),
+              ),
             ),
           ),
         },
       ),
     );
   }
+}
+
+/// The detail page owns a `RequestCubit` for that one listing (P4b).
+void _openDetail(BuildContext context, Listing listing) {
+  final transactions = context.read<TransactionRepository>();
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => BlocProvider(
+        create: (_) => RequestCubit(transactions),
+        child: ListingDetailPage(listing),
+      ),
+    ),
+  );
 }
 
 class _Message extends StatelessWidget {

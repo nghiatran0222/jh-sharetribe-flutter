@@ -26,6 +26,14 @@ final class EmailTaken extends AppError {
   String get message => 'An account with this email already exists.';
 }
 
+/// The customer already has a request open on this listing.
+final class AlreadyRequested extends AppError {
+  const AlreadyRequested();
+
+  @override
+  String get message => 'You have already requested this listing.';
+}
+
 /// No session, or the session expired and could not be refreshed.
 final class Unauthorized extends AppError {
   const Unauthorized();

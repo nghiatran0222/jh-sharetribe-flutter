@@ -86,6 +86,36 @@ void main() {
     );
   });
 
+  group('given a logged-in customer on the listings', () {
+    setUp(() async {
+      await MockAuthRepository(
+        store,
+        latency: Duration.zero,
+      ).login(email: 'customer@test.com', password: 'password123');
+    });
+
+    testWidgets(
+      'when a listing is tapped and requested, then it waits for the provider',
+      (tester) async {
+        await pumpApp(tester);
+
+        await tester.tap(find.text('City bike'));
+        await settle(tester);
+        expect(find.widgetWithText(AppBar, 'City bike'), findsOneWidget);
+
+        await tester.enterText(
+          find.byKey(const Key('request_note')),
+          'Free next weekend?',
+        );
+        await tester.tap(find.byKey(const Key('request_button')));
+        await settle(tester);
+
+        expect(find.byKey(const Key('request_sent')), findsOneWidget);
+        expect(find.textContaining('expire after 3 days'), findsOneWidget);
+      },
+    );
+  });
+
   group('given a stored session', () {
     setUp(() async {
       await MockAuthRepository(

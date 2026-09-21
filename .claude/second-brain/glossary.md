@@ -8,7 +8,7 @@ The shared words for `process.edn`, Dart code, tests and the README. Use these n
 |--|--|--|
 | Identity | users, login, tokens | `AuthRepository`, `TokenStore` |
 | Catalog | listings, images, authors | `ListingRepository` |
-| Transactions | the `simple-request` process | `TransactionRepository` (stretch, P4b) |
+| Transactions | the `simple-request` process | `TransactionRepository` (mock + live), `RequestCubit` |
 
 Sharetribe owns the rules of all three. The app is a client, and `data/json_api.dart` + `fromJsonApi` is the only translation from Sharetribe's shapes to domain models.
 

@@ -1,12 +1,15 @@
 import 'core/env.dart';
 import 'data/mock/mock_auth_repository.dart';
 import 'data/mock/mock_listing_repository.dart';
+import 'data/mock/mock_transaction_repository.dart';
 import 'data/sharetribe/live_auth_repository.dart';
 import 'data/sharetribe/live_listing_repository.dart';
+import 'data/sharetribe/live_transaction_repository.dart';
 import 'data/sharetribe/sharetribe_client.dart';
 import 'data/sharetribe/token_store.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/repositories/listing_repository.dart';
+import 'domain/repositories/transaction_repository.dart';
 
 /// The composition root: the one place that decides mock or live (ADR 0004).
 ///
@@ -16,6 +19,7 @@ class AppDependencies {
   const AppDependencies({
     required this.authRepository,
     required this.listingRepository,
+    required this.transactionRepository,
   });
 
   /// Builds the repositories for [env]. [tokenStore] overrides the default
@@ -32,12 +36,17 @@ class AppDependencies {
       return AppDependencies(
         authRepository: MockAuthRepository(store, latency: mockLatency),
         listingRepository: MockListingRepository(store, latency: mockLatency),
+        transactionRepository: MockTransactionRepository(
+          store,
+          latency: mockLatency,
+        ),
       );
     }
     final client = SharetribeClient(clientId: env.clientId, tokenStore: store);
     return AppDependencies(
       authRepository: LiveAuthRepository(client, store),
       listingRepository: LiveListingRepository(client),
+      transactionRepository: LiveTransactionRepository(client),
     );
   }
 
@@ -46,4 +55,5 @@ class AppDependencies {
 
   final AuthRepository authRepository;
   final ListingRepository listingRepository;
+  final TransactionRepository transactionRepository;
 }

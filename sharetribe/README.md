@@ -43,7 +43,7 @@ flex-cli process list --process simple-request -m $MID
 
 ## How a transaction picks the version
 
-A client picks the process when it initiates a transaction: the Marketplace API call `transactions/initiate` takes `processAlias`. The Flutter app does not initiate transactions yet — the Request button is stretch work ([ADR 0005](../docs/adr/0005-request-flow-as-stretch.md)) — so the alias is selected in Console, on the listing type. When that flow is built, the app sends `processAlias: simple-request/release-2` with `transition/request`. If you also run the Sharetribe Web Template, set its listing type's process alias to `simple-request/release-2`. Confirm this step in Console during P7.
+A client picks the process when it initiates a transaction: the Marketplace API call `transactions/initiate` takes `processAlias`. The Flutter app's Request button sends `processAlias: simple-request/release-2` with `transition/request` ([ADR 0005](../docs/adr/0005-request-flow-as-stretch.md) made this stretch work; it is built). If you also run the Sharetribe Web Template, set its listing type's process alias to `simple-request/release-2` so it starts on the same version.
 
 ## Sandbox data
 

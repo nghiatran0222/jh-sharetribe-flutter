@@ -3,7 +3,9 @@ import 'package:sharetribe_flutter/core/result.dart';
 import 'package:sharetribe_flutter/domain/models/listing.dart';
 import 'package:sharetribe_flutter/domain/models/user.dart';
 import 'package:sharetribe_flutter/domain/repositories/auth_repository.dart';
+import 'package:sharetribe_flutter/domain/models/transaction.dart';
 import 'package:sharetribe_flutter/domain/repositories/listing_repository.dart';
+import 'package:sharetribe_flutter/domain/repositories/transaction_repository.dart';
 
 const testUser = User(
   id: 'u1',
@@ -62,3 +64,26 @@ class FakeListingRepository implements ListingRepository {
 
 const testListing = Listing(id: 'l1', title: 'City bike');
 const networkFailure = Err<List<Listing>>(NetworkError());
+
+/// A [TransactionRepository] that answers with whatever the test sets.
+class FakeTransactionRepository implements TransactionRepository {
+  FakeTransactionRepository([this.result = const Ok(testTransaction)]);
+
+  Result<Transaction> result;
+  final List<({String listingId, String note})> calls = [];
+
+  @override
+  Future<Result<Transaction>> requestListing({
+    required String listingId,
+    String note = '',
+  }) async {
+    calls.add((listingId: listingId, note: note));
+    return result;
+  }
+}
+
+const testTransaction = Transaction(
+  id: 'tx1',
+  lastTransition: transitionRequest,
+  processName: 'simple-request',
+);

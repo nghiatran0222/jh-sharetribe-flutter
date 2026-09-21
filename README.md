@@ -13,10 +13,10 @@ A Sharetribe Flex marketplace with a modified transaction process, plus a Flutte
 ## What is built
 
 - Sharetribe process v1 and v2 as `process.edn` + email templates, published to the `nghiatran-test` marketplace with `release-1` on version 1 and `release-2` on version 2. Reproduce the steps against your own marketplace with step 1 below.
-- Flutter: login (password grant, `scope=user`), tokens in Keychain/Keystore, session restore on launch, automatic token refresh on a 401, listings with author, price and image, pull-to-refresh, empty and error states, logout.
-- 78 tests, no device and no network needed — including one real Sharetribe response parsed as a fixture, plus one live run against the Marketplace API (screenshot below).
+- Flutter: login (password grant, `scope=user`), tokens in Keychain/Keystore, session restore on launch, automatic token refresh on a 401, listings with author, price and image, pull-to-refresh, empty and error states, logout, and a listing detail page whose **Request** button starts a transaction with `transition/request` on `simple-request/release-2`.
+- 93 tests, no device and no network needed — including one real Sharetribe response parsed as a fixture, plus one live run against the Marketplace API (screenshot below).
 
-Not built, on purpose: no in-app request flow (the Request button is stretch, [ADR 0005](docs/adr/0005-request-flow-as-stretch.md)), no payments ([ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md)), no sign-up screen (the repository supports it; the brief asks only for authentication).
+Not built, on purpose: no payments ([ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md)), no inbox or provider-side accept/decline screens (the process supports them; the app is a customer client), and no sign-up screen (the repository supports it; the brief asks only for authentication). The request flow was stretch work ([ADR 0005](docs/adr/0005-request-flow-as-stretch.md)) and is now built.
 
 ## Prerequisites
 
@@ -80,7 +80,7 @@ make verify                            # flutter analyze, then flutter test
 make verify FLUTTER="fvm flutter"      # with FVM
 ```
 
-This is the project's definition of done. It runs 78 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
+This is the project's definition of done. It runs 93 tests, including `test/app_mock_test.dart`, which starts the whole app in mock mode, logs in and checks that listings render.
 
 The tests that matter most for a reviewer:
 
@@ -90,7 +90,8 @@ The tests that matter most for a reviewer:
 | `test/json_api_test.dart`, `test/listing_test.dart` | `data` + `included` denormalizing; missing image variant, price or author map to null, never an error |
 | `test/live_repositories_test.dart` | the exact requests sent to Sharetribe, and how failures map to errors |
 | `test/live_fixture_test.dart` | a **real** `listings/query` response from the marketplace, parsed by the same code the app uses (ADR 0015) |
-| `test/app_mock_test.dart` | cold start, login, wrong password, session restore, logout, pull-to-refresh |
+| `test/transaction_repository_test.dart` | the exact `transactions/initiate` body: `processAlias: simple-request/release-2` and `transition/request` |
+| `test/app_mock_test.dart` | cold start, login, wrong password, session restore, logout, pull-to-refresh, and requesting a listing |
 
 ### End-to-end on a simulator (optional)
 
@@ -111,9 +112,11 @@ Live mode, against a real Sharetribe marketplace (`nghiatran-test`): the app log
 
 Mock mode, from the end-to-end run above:
 
-| Login | Listings | Wrong password |
-|--|--|--|
-| ![Login screen](docs/screenshots/01-login.png) | ![Listings screen](docs/screenshots/02-listings.png) | ![Login error](docs/screenshots/03-login-error.png) |
+| Login | Listings | Wrong password | Request sent |
+|--|--|--|--|
+| ![Login screen](docs/screenshots/01-login.png) | ![Listings screen](docs/screenshots/02-listings.png) | ![Login error](docs/screenshots/03-login-error.png) | ![Request sent](docs/screenshots/05-request-sent.png) |
+
+The last one is the v2 process in the UI: the request waits for the provider, and says so.
 
 Both on an iPhone 15 simulator.
 
@@ -161,7 +164,7 @@ The marketplace runs a custom process called `simple-request`, with no payment. 
 
 **Why this change.** It moves the decision to the person who owns the listing, which is how rental and service marketplaces actually work, and it is a real structural change rather than a renamed label: four new states, four new transitions, a new actor in the decision, a time-based transition and new notification emails. Every branch terminates, so nothing can get stuck waiting. The new transitions are ordinary provider and customer actions, so the app can call them with a normal user token — no backend and no Integration API secret. And `transition/request` keeps its name, actor and parameters, so a client only has to switch which process version it starts on.
 
-**How it ships without breaking anything.** Sharetribe process versions are immutable, and every transaction is pinned to the version it started on. So v2 is pushed as version 2 behind a **new** alias, `simple-request/release-2`, while `release-1` still points at version 1 and is never moved. Requests started under v1 finish under v1 rules; only new requests initiated with `release-2` get the accept step. A client selects it by sending `processAlias: simple-request/release-2` on `transactions/initiate`. The Flutter app does not initiate transactions yet — that is the stretch item in [ADR 0005](docs/adr/0005-request-flow-as-stretch.md) — so today the alias is chosen in Console, on the listing type.
+**How it ships without breaking anything.** Sharetribe process versions are immutable, and every transaction is pinned to the version it started on. So v2 is pushed as version 2 behind a **new** alias, `simple-request/release-2`, while `release-1` still points at version 1 and is never moved. Requests started under v1 finish under v1 rules; only new requests initiated with `release-2` get the accept step. A client selects it by sending `processAlias: simple-request/release-2` on `transactions/initiate`, which is exactly what this app's Request button does (`lib/data/sharetribe/live_transaction_repository.dart`, asserted in `test/transaction_repository_test.dart`). Console's listing type carries the same alias for any other client.
 
 Records: [ADR 0007](docs/adr/0007-v2-provider-accept.md) (the change), [ADR 0003](docs/adr/0003-process-versioning-release-2-alias.md) (the alias), [ADR 0008](docs/adr/0008-hand-written-no-payment-baseline.md) (no payment).
 

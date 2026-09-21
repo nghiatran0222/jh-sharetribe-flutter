@@ -6,14 +6,16 @@ import '../../domain/models/money.dart';
 
 /// One listing: image, title, price, author.
 class ListingTile extends StatelessWidget {
-  const ListingTile(this.listing, {super.key});
+  const ListingTile(this.listing, {super.key, this.onTap});
 
   final Listing listing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final image = listing.image;
     return ListTile(
+      onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       leading: SizedBox.square(
         dimension: 56,

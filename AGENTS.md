@@ -6,7 +6,7 @@ Guidance for coding agents (Claude Code reads it via `CLAUDE.md` → `@AGENTS.md
 
 A 3-day take-home assessment: a **Sharetribe Flex** marketplace with a modified transaction process, plus a **Flutter** app that logs in to Sharetribe and lists listings. The brief is in `docs/brief.md`; the submission README is the repo root `README.md`.
 
-**Status (2026-09-20):** P1–P6 done. The process v1/v2 is approved and frozen in `sharetribe/`. The Flutter app is built and `make verify` is green (78 tests): foundations, JSON:API, dio client with refresh, mock and live repositories, login and listings on Cubits, plus an E2E suite on a simulator (ADR 0016). P7 is done: the process is published to the `nghiatran-test` marketplace, and a live login fetched real listings through the Marketplace API (`docs/screenshots/04-live-listings.png`). The real `listings/query` fixture is captured and tested (`test/live_fixture_test.dart`). Remaining: the optional P4b stretch (Transaction repository and Request button). P6's adversarial review is in `docs/review-p6.md`.
+**Status (2026-09-21):** P1–P6 done. The process v1/v2 is approved and frozen in `sharetribe/`. The Flutter app is built and `make verify` is green (93 tests): foundations, JSON:API, dio client with refresh, mock and live repositories, login and listings on Cubits, plus an E2E suite on a simulator (ADR 0016). P7 is done: the process is published to the `nghiatran-test` marketplace, and a live login fetched real listings through the Marketplace API (`docs/screenshots/04-live-listings.png`). The real `listings/query` fixture is captured and tested (`test/live_fixture_test.dart`). P4b is built: `TransactionRepository` (mock + live) and a listing detail page whose Request button sends `transition/request` on `simple-request/release-2`. Remaining: run the app once on Android (it builds; nothing has executed there yet). P6's adversarial review is in `docs/review-p6.md`.
 
 Planning docs:
 - `docs/plan.md`: phased build plan (P0–P7), agent session prompts, human gates. Its "Lock so the agent cannot drift" section is binding.
@@ -32,7 +32,7 @@ flutter_app/
     core/                # Env, Result, AppError
     data/                # json_api.dart, sharetribe/ (client, TokenStore, guard, live repos), mock/
     domain/              # models + abstract repositories
-    presentation/        # Cubits + login, listings pages
+    presentation/        # Cubits + login, listings, listing_detail pages
     app.dart             # RepositoryProvider / BlocProvider wiring
     app_dependencies.dart# composition root: mock or live from Env
   assets/mock/           # bundled listing images, so mock mode needs no network
@@ -78,7 +78,7 @@ From the repo root:
 - `Result`/`AppError` is the error type. No uncaught throws in repositories. A missing image variant maps to a null image.
 - Token refresh lives only in the dio `QueuedInterceptor`.
 - Name tests as behaviors: `group('given <state>')` + `test('when <action>, then <outcome>')`; `bloc_test` descriptions read `emits [...] when ...`. No Gherkin or `.feature` files.
-- The Transaction repository and Request button are stretch work (P4b), only after P4 is green.
+- The Transaction repository and Request button (P4b) are built. Transition and alias names live in `domain/models/transaction.dart` and must match `process.edn` verbatim.
 - Console, `flex-cli` and live credentials are human-only steps. Stop and ask instead of attempting them.
 - One writer at a time on `flutter_app/lib`.
 - Every new architecture decision gets an ADR: copy `docs/adr/template.md` to the next `docs/adr/NNNN-title.md`, add one line to `.claude/second-brain/decisions.md`, and link it from the matching row in `docs/q-and-a.md`. Never contradict an Accepted ADR without writing a new ADR that supersedes it (and marking the old one "Superseded by"). Use the `new-adr` skill (`.claude/skills/new-adr/`).
